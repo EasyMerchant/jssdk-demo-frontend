@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from './sidebar';
-// import CodeView from './codeView';
+import CodeView from './codeView';
 
 const PaymentOptions = () => {
   let elements;
   const [loading, setLoading] = useState(false);
-  // const [showObject, setShowObject] = useState(false);
+  const [showObject, setShowObject] = useState(false);
   const [customizeOptions, setCustomizeOptions] = useState({
     container: 'payments',
     environment: "stage",
@@ -100,14 +100,15 @@ const PaymentOptions = () => {
     initialize();
   }, []);
 
-  // const toggleShowObject = ()=>setShowObject((pervVal)=>!pervVal);
+  const toggleShowObject = () => setShowObject((pervVal) => !pervVal);
 
   return (
     <div className='flex gap-3  bg-white  dark:bg-gray-800 dark:text-white'>
       <Sidebar customizeOptions={ customizeOptions }
         setCustomizeOptions={ setCustomizeOptions }
         handleRenderUpdate={ initialize }
-      // toggleShowObject={toggleShowObject}
+        toggleShowObject={ toggleShowObject }
+        showObject={ showObject }
       />
       <div className='relative w-full'>
         { loading &&
@@ -117,9 +118,7 @@ const PaymentOptions = () => {
             </div>
           </div>
         }
-        {/* { showObject &&
-          <CodeView customizeOptions={ customizeOptions } />
-        } */}
+        { showObject && <CodeView customizeOptions={ customizeOptions } /> }
         <div id="payments" className='w-full'></div>
       </div>
     </div>

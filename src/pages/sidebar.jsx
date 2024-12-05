@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FieldsOptions from './FieldsOptions';
 
-const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) => {
-    const [copied, setCopied] = useState(false);
+const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
     const {
         paymentMethods,
@@ -134,12 +133,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
         handleRenderUpdate();
     };
 
-    const copyToClipboard = () => {
-        const code = JSON.stringify(customizeOptions, null, 2);
-        navigator.clipboard.writeText(code)
-            .then(() => setCopied(true))
-            .catch(() => setCopied(false));
-    };
 
     return (
         <div
@@ -222,7 +215,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                             />
                                             <label
                                                 htmlFor={ `${method}-checkbox` }
-                                                className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                                className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                             >
                                                 { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
                                             </label>
@@ -258,7 +251,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="save-card-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Save Card
                                     </label>
@@ -276,7 +269,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="scan-card-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Scan Card
                                     </label>
@@ -310,7 +303,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="billing-fields-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Billing Info
                                     </label>
@@ -329,7 +322,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="additional-fields-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Additional Info
                                     </label>
@@ -364,7 +357,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="save-account-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Save Account
                                     </label>
@@ -382,7 +375,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="show-receipt-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Show Receipt
                                     </label>
@@ -400,7 +393,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="show-total-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Show Total
                                     </label>
@@ -418,7 +411,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                     />
                                     <label
                                         htmlFor="show-submit-button-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Show Submit Button
                                     </label>
@@ -427,7 +420,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                             <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
                                 <div className="flex items-center ps-3">
                                     <input
-                                        id="show-receipt-checkbox"
+                                        id="token-only-checkbox"
                                         type="checkbox"
                                         name='tokenOnly'
                                         checked={ tokenOnly }
@@ -435,8 +428,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                                         className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                     />
                                     <label
-                                        htmlFor="show-receipt-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                        htmlFor="token-only-checkbox"
+                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                     >
                                         Token Only
                                     </label>
@@ -718,8 +711,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate }) 
                     </li>
                 </ul>
                 <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
-                <button onClick={ copyToClipboard } className='mt-3 text-center w-full bg-blue-300 px-2 py-3 rounded-xl border-none'>
-                    { copied ? 'Copied!' : 'Copy Code' }
+                <button onClick={ () => toggleShowObject() } className='mt-3 text-center w-full bg-blue-800 px-2 py-3 rounded-xl border-none text-white'>
+                    { showObject ? "Close" : "Show Code" }
                 </button>
             </div>
         </div>
