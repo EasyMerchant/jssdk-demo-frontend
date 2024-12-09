@@ -22,6 +22,17 @@
 .primary-font-svg{
   fill:var(--primary-color) !important ;
 }
+.border-dark-200 {
+  border-color: #ffffff29;
+}
+.border-dark-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(75 75 75);
+}
+
+.text-dark-50 {
+  color: #ffffff61;
+}
 
 ::-webkit-scrollbar {
   display: none;
