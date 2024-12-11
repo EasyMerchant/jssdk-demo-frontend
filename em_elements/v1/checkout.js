@@ -1516,7 +1516,9 @@ var formatCardNumber = function (event,input){
           if(initSettings.scanCard){
             var scanBtn = document.createElement('button');
             scanBtn.id="scan_card";
-            scanBtn.innerHTML = '<img src="'+appUrl+'/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
+            // Change this to localhost url for load image locally.
+            // scanBtn.innerHTML = '<img src="'+appUrl+'/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
+            scanBtn.innerHTML = '<img src="http://localhost:5000/v1/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
             formFieldFlexDiv.appendChild(scanBtn);
             formFieldDiv.appendChild(formFieldFlexDiv);
             scanBtn.classList.add("scan_card","flex","gap-2","items-center");
@@ -2970,7 +2972,9 @@ const isCryptoPaymentSuccess  = async () => {
     if (paymentMethods.includes('card') && initSettings.paymentMethods.includes('card')) {
       var cardTab = document.createElement('div');
       cardTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      cardTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/card.svg' : appUrl + '/img/card-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
+      // Change this to localhost url for load image locally.
+      // cardTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/card.svg' : appUrl + '/img/card-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
+      cardTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ?  'http://localhost:5000/v1/img/card.svg' : 'http://localhost:5000/v1/img/card-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
       tabDiv.appendChild(cardTab);
       if(activeTab=="" || activeTab=="card"){
         activeTab = 'card';
@@ -2990,7 +2994,9 @@ const isCryptoPaymentSuccess  = async () => {
     if (paymentMethods.includes('ach') && initSettings.paymentMethods.includes('ach')) {
       var achTab = document.createElement('div');
       achTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      achTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/bank.svg' : appUrl + '/img/bank-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
+      // Change this to localhost url for load image locally.
+      // achTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/bank.svg' : appUrl + '/img/bank-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
+      achTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/bank.svg' : 'http://localhost:5000/v1/img/bank-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
      
       if(activeTab=="" || activeTab=="ach"){
         activeTab = "ach"
@@ -3011,7 +3017,9 @@ const isCryptoPaymentSuccess  = async () => {
     if (paymentMethods.includes('crypto') && initSettings.paymentMethods.includes('crypto')) {
       var cryptoTab = document.createElement('div');
       cryptoTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      cryptoTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/crypto.svg' : appUrl + '/img/crypto-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
+      // Change this to localhost url for load image locally.
+      // cryptoTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/crypto.svg' : appUrl + '/img/crypto-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
+      cryptoTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/crypto.svg' : 'http://localhost:5000/v1/img/crypto-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
       if(activeTab=="" || activeTab == "crypto"){
         activeTab = "crypto"
         cryptoTab.classList.add("selected");
@@ -3031,7 +3039,9 @@ const isCryptoPaymentSuccess  = async () => {
     if (paymentMethods.includes('wallet') && initSettings.paymentMethods.includes('wallet')) {
       var walletTab = document.createElement('div');
       walletTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      walletTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/wallet.svg' : appUrl + '/img/wallet-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
+      // Change this to localhost url for load image locally.
+      // walletTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/wallet.svg' : appUrl + '/img/wallet-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
+      walletTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/wallet.svg' : 'http://localhost:5000/v1/img/wallet-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
       if(activeTab == "wallet"){
         activeTab = "wallet"
         walletTab.classList.add("selected");
