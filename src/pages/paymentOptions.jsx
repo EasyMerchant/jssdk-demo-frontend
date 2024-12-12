@@ -51,7 +51,9 @@ const PaymentOptions = () => {
       secondaryButtonFontColor: "#1757d9",
       theme: "light",
       fontSize: "16",
-      borderRadious: "8",
+      fontWeight: 500,
+      fontFamily:`"Montserrat", sans-serif`,
+      borderRadius: "8",
     }
   });
 
@@ -105,14 +107,14 @@ const PaymentOptions = () => {
   const toggleShowObject = () => setShowObject((pervVal) => !pervVal);
 
   return (
-    <div className='flex  bg-[#F7F7F7]  dark:bg-gray-800 dark:text-white'>
+    <div className='flex bg-[#F7F7F7] dark:bg-gray-800 dark:text-white'>
       <Sidebar customizeOptions={ customizeOptions }
         setCustomizeOptions={ setCustomizeOptions }
         handleRenderUpdate={ initialize }
         toggleShowObject={ toggleShowObject }
         showObject={ showObject }
       />
-      <div className='relative w-1-392 gap-3 flex flex-col justify-center items-center'>
+      <div className='relative w-1-392 gap-0 flex flex-col justify-center items-center'>
         { loading &&
           <div className='flex w-full h-dvh absolute top-0 left-0 justify-center items-center bg-white z-10'>
             <div

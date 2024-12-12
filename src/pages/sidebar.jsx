@@ -7,8 +7,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     const [appearance, setAppearance] = useState(false);
     const [optionsToggle, setOptionsToggle] = useState({
         additionalFieldsOptions: true,
-        paymentOptions: false,
-        fieldsOptions:false
+        paymentOptions: true,
+        fieldsOptions: false
     });
     const {
         paymentMethods,
@@ -37,6 +37,13 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             return { ...prevOptions, paymentMethods: updatedMethods };
         });
     };
+    const handleTogglePaymentMEthods = (event) => {
+        const { checked } = event.target
+        setCustomizeOptions((pervData) => ({
+            ...pervData,
+            paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : []
+        }))
+    }
     const handleInputChange = (event) => {
         const { name, value } = event.target
         setCustomizeOptions((prevData) => ({
@@ -47,10 +54,24 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
 
     const handleCardCheckboxChange = (event) => {
         const { name, checked } = event.target
-        setCustomizeOptions((prevOptions) => ({
-            ...prevOptions,
-            [name]: checked,
-        }))
+        if (name === "tokenOnly") {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+                showReceipt: !checked
+            }));
+        } else if (name === "showSubmitButton") {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+                submitButtonText: checked ? "Submit" : ""
+            }));
+        } else {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+            }));
+        }
     };
 
     const handleFieldsRender = (event) => {
@@ -171,17 +192,68 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     return (
         <div
             id="drawer-navigation"
-            className="w-392 shadow-sidebar scrollbar-hidden  h-screen  pt-10 px-6 pb-6 overflow-y-auto transition-transform bg-white dark:bg-gray-800"
+            className="relative w-392 scrollbar-hidden h-screen pb-6 overflow-y-auto transition-transform bg-white dark:bg-gray-800"
             tabIndex={ -1 }
             aria-labelledby="drawer-navigation-label"
         >
-            <h5
-                id="drawer-navigation-label"
-                className="text-base pt-0 px-0 pb-034 font-semibold text-black capitalize dark:text-white rounded-xl"
-            >
-                Appearance Settings
-            </h5>
-            <div className="relative">
+            <div className='flex gap-4 sticky left-0 w-full top-0 z-30 py-4 px-2 justify-between items-center bg-slate-200'>
+                <h5
+                    id="drawer-navigation-label"
+                    className="text-base pt-0 px-0 font-semibold text-black capitalize dark:text-white rounded-xl"
+                >
+                    Appearance Settings
+                </h5>
+                <div className='flex gap-2'>
+                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
+                        <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                {" "}
+                                <path
+                                fill="currentColor"
+                                d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
+                                />{" "}
+                                <path
+                                fill="currentColor"
+                                d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
+                                />{" "}
+                            </g>
+                        </svg>
+
+
+                    </button>
+                    <button onClick={ () => toggleShowObject() } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
+                        <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M17 7.82959L18.6965 9.35641C20.239 10.7447 21.0103 11.4389 21.0103 12.3296C21.0103 13.2203 20.239 13.9145 18.6965 15.3028L17 16.8296"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                                <path
+                                    opacity="0.5"
+                                    d="M13.9868 5L10.0132 19.8297"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                                <path
+                                    d="M7.00005 7.82959L5.30358 9.35641C3.76102 10.7447 2.98975 11.4389 2.98975 12.3296C2.98975 13.2203 3.76102 13.9145 5.30358 15.3028L7.00005 16.8296"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                            </g>
+                        </svg>
+
+                    </button>
+                </div>
+            </div>
+            <div className="relative pt-10 px-6">
                 <div>
                     <ul className="font-medium flex flex-col gap-4">
                         {/* Theme Options List */ }
@@ -267,7 +339,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 background: 'none',
                                                 WebkitAppearance: 'none',
                                                 MozAppearance: 'none',
-                                                padding: '8px 0'
+                                                padding: '8px 16px'
                                             } }
                                         >
                                             <option value="usd">US</option>
@@ -464,7 +536,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </label>
                             </div>
                         </li>
-                        <li className="w-full">
+                        { !tokenOnly && <li className="w-full">
                             <div className="flex items-center gap-x-3">
                                 <input
                                     id="show-receipt-checkbox"
@@ -481,7 +553,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     Show Receipt
                                 </label>
                             </div>
-                        </li>
+                        </li> }
                         <li className="w-full">
                             <div className="flex items-center gap-x-3">
                                 <input
@@ -530,9 +602,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     id="payment-method-checkbox"
                                     type="checkbox"
                                     checked={ optionsToggle.paymentOptions }
-                                    onChange={ () => {
+                                    onChange={ (event) => {
                                         handleSidebarToggle("payment-options");
-                                        setOptionsToggle((pervVal) => ({ ...pervVal, paymentOptions: !pervVal.paymentOptions }))
+                                        handleTogglePaymentMEthods(event);
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, paymentOptions: !pervVal.paymentOptions }));
                                     }
                                     }
                                     className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
@@ -546,7 +619,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                             <ul
                                 id="payment-options"
-                                className="hidden w-full min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                className="w-full min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             >
                                 { optionsArray.map((method, index) => {
                                     return (
@@ -575,10 +648,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </ul>
                         </li>
                     </ul>
-                    <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
+                    {/* <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
                     <button onClick={ () => toggleShowObject() } className='mt-3 text-center w-full bg-blue-800 px-2 py-3 rounded-xl border-none text-white'>
                         { showObject ? "Close" : "Show Code" }
-                    </button>
+                    </button> */}
                 </div>
                 { appearance && <AppearanceSettings appearance={ appearance } handleAppearanceToggle={ handleAppearanceToggle } apperanceSettings={ apperanceSettings } handleAppearanceSettings={ handleAppearanceSettings } /> }
             </div>

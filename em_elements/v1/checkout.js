@@ -3209,18 +3209,32 @@ const isCryptoPaymentSuccess  = async () => {
         root_theme.style.setProperty('--secondary-hover', apperanceSettings.secondary_btn_hover_col);
       }
 
-      if(intSettingsLength>0 && initApperanceSettings.borderRadious && initApperanceSettings.borderRadious!=""){
-        root_theme.style.setProperty('--border-radious', initApperanceSettings.borderRadious+"px"); 
+      if(intSettingsLength>0 && initApperanceSettings.borderRadius && initApperanceSettings.borderRadius!=""){
+        root_theme.style.setProperty('--border-radius', initApperanceSettings.borderRadius+"px"); 
       }
       else if(apiSettingsLength>0){
-        root_theme.style.setProperty('--border-radious', apperanceSettings.border_radious+"px");
+        root_theme.style.setProperty('--border-radius', apperanceSettings.border_radious+"px");
       }
       
       if(intSettingsLength>0 && initApperanceSettings.fontSize && initApperanceSettings.fontSize!=""){
         root_theme.style.setProperty('--font-size', initApperanceSettings.fontSize+"px"); 
       }
       else if (apiSettingsLength>0){
-        root_theme.style.setProperty('--font-size', initApperanceSettings.font_size+"px"); 
+        root_theme.style.setProperty('--font-size', apperanceSettings.font_size+"px"); 
+      }
+      
+      if(intSettingsLength>0 && initApperanceSettings.fontFamily && initApperanceSettings.fontFamily!=""){
+        root_theme.style.setProperty('--font-family', initApperanceSettings.fontFamily); 
+      }
+      else if(apiSettingsLength>0){
+        root_theme.style.setProperty('--font-family', apperanceSettings.font_family);
+      }
+
+      if(intSettingsLength>0 && initApperanceSettings.fontWeight && initApperanceSettings.fontWeight!=""){
+        root_theme.style.setProperty('--font-weight', initApperanceSettings.fontWeight); 
+      }
+      else if(apiSettingsLength>0){
+        root_theme.style.setProperty('--font-weight', apperanceSettings.font_weight);
       }
     
   }
