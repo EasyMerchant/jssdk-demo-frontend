@@ -57,10 +57,13 @@ const PaymentOptions = () => {
     document.getElementById("payments").innerHTML = '';
     setLoading(true);
     try {
-      const { client_token, amount } = await fetch("http://localhost:5000/create.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      }).then((r) => r.json());
+      let amount = 12.50; // please replace the value with amount provided on demo page
+      const response = await fetch("/.netlify/functions/paymentIntent", {
+        method: 'POST',
+        body: JSON.stringify({ amount }),
+      });
+      const json = await response.json();
+      let client_token = json.body.client_token;
 
       elements = new lyfPayCheckout(client_token);
       elements.create({
