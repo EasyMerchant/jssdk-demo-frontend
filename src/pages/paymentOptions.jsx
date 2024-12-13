@@ -61,7 +61,7 @@ const PaymentOptions = () => {
     document.getElementById("payments").innerHTML = '';
     setLoading(true);
     try {
-      let amount = 12.50; // please replace the value with amount provided on demo page
+      let amount = customizeOptions.amount; // please replace the value with amount provided on demo page
       const response = await fetch("/.netlify/functions/paymentIntent", {
         method: 'POST',
         body: JSON.stringify({ amount }),
