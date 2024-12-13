@@ -53,7 +53,7 @@ let elements;
             secondaryButtonHoverColor: "#1757d9",
             secondaryButtonFontColor: "#1757d9",
             
-            borderRadious: "8"
+            borderRadius: "8"
         }
               
     });

@@ -1516,7 +1516,9 @@ var formatCardNumber = function (event,input){
           if(initSettings.scanCard){
             var scanBtn = document.createElement('button');
             scanBtn.id="scan_card";
-            scanBtn.innerHTML = '<img src="'+appUrl+'/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
+            // Change this to localhost url for load image locally.
+            // scanBtn.innerHTML = '<img src="'+appUrl+'/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
+            scanBtn.innerHTML = '<img src="http://localhost:5000/v1/img/camera.svg" width="24" height="24"/><p class="font-semibold text-sm leading-16-94 text-primary-300 font-inter">Scan Card</p>';
             formFieldFlexDiv.appendChild(scanBtn);
             formFieldDiv.appendChild(formFieldFlexDiv);
             scanBtn.classList.add("scan_card","flex","gap-2","items-center");
@@ -2513,7 +2515,7 @@ close.addEventListener("click", function () {
        parentElem.appendChild(customerAuthForm); 
     }
     let boxDiv =  document.createElement("div");
-    boxDiv.classList.add("mt-5","mb-9","p-4","rounded-lg","border","border-light-100");
+    boxDiv.classList.add("mt-5","mb-9","p-4","rounded-lg","border",initSettings?.apperanceSettings?.theme === "light" ? "border-light-100":"border-dark-100");
     renderACHInputElements(boxDiv)
     parentElem.appendChild(boxDiv);
     renderACHTerms(parentElem);
@@ -2537,7 +2539,7 @@ close.addEventListener("click", function () {
 
   var renderEachWallets =  function (parentElem,params) {
     let boxDiv =  document.createElement("div");
-    boxDiv.classList.add("p-4","rounded-lg","border","border-light-100");
+    boxDiv.classList.add("p-4","rounded-lg","border",initSettings?.apperanceSettings?.theme === "light" ? "border-light-100":"border-dark-100");
 
     let colDiv =  document.createElement("div");
     colDiv.classList.add("flex","flex-col","gap-6");
@@ -2802,7 +2804,6 @@ close.addEventListener("click", function () {
         resend_text.innerHTML = "<a class='text-primary-300'>Resend</a>"
         resend_text.addEventListener("click", function () {
           if(inlineAuthForm){
-           // console.log("customerInlineAuthForm",customerInlineAuthForm)
             sendCustomerOTP(customerInlineAuthForm,true,customerInlineAuthForm);
           }
           else{
@@ -2970,8 +2971,10 @@ const isCryptoPaymentSuccess  = async () => {
     tabDiv.classList.add("methods","flex", "gap-3","overflow-y-auto");
     if (paymentMethods.includes('card') && initSettings.paymentMethods.includes('card')) {
       var cardTab = document.createElement('div');
-      cardTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2","border-light-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      cardTab.innerHTML = '<img src="'+appUrl+'/img/card.svg"  width="24" height="24"/><p class="card-label secondary-font  text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
+      cardTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
+      // Change this to localhost url for load image locally.
+      // cardTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/card.svg' : appUrl + '/img/card-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
+      cardTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ?  'http://localhost:5000/v1/img/card.svg' : 'http://localhost:5000/v1/img/card-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Card</p>';
       tabDiv.appendChild(cardTab);
       if(activeTab=="" || activeTab=="card"){
         activeTab = 'card';
@@ -2990,8 +2993,10 @@ const isCryptoPaymentSuccess  = async () => {
     }
     if (paymentMethods.includes('ach') && initSettings.paymentMethods.includes('ach')) {
       var achTab = document.createElement('div');
-      achTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2","border-light-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      achTab.innerHTML = '<img src="'+appUrl+'/img/bank.svg"  width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
+      achTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
+      // Change this to localhost url for load image locally.
+      // achTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/bank.svg' : appUrl + '/img/bank-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
+      achTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/bank.svg' : 'http://localhost:5000/v1/img/bank-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Bank</p>';
      
       if(activeTab=="" || activeTab=="ach"){
         activeTab = "ach"
@@ -3011,8 +3016,10 @@ const isCryptoPaymentSuccess  = async () => {
     }
     if (paymentMethods.includes('crypto') && initSettings.paymentMethods.includes('crypto')) {
       var cryptoTab = document.createElement('div');
-      cryptoTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2","border-light-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-      cryptoTab.innerHTML = '<img src="'+appUrl+'/img/crypto.svg"  width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
+      cryptoTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
+      // Change this to localhost url for load image locally.
+      // cryptoTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/crypto.svg' : appUrl + '/img/crypto-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
+      cryptoTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/crypto.svg' : 'http://localhost:5000/v1/img/crypto-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Crypto</p>';
       if(activeTab=="" || activeTab == "crypto"){
         activeTab = "crypto"
         cryptoTab.classList.add("selected");
@@ -3029,28 +3036,29 @@ const isCryptoPaymentSuccess  = async () => {
         resizeIframe();
       });
     }
-    // if (paymentMethods.includes('wallet') && initSettings.paymentMethods.includes('wallet')) {
-    //   var walletTab = document.createElement('div');
-    //   walletTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2","border-light-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
-    //   walletTab.innerHTML = '<img src="'+appUrl+'/img/wallet.svg"  width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
-     
-    //   if(activeTab == "wallet"){
-    //     activeTab = "wallet"
-    //     walletTab.classList.add("selected");
-    //   }
-    //   tabDiv.appendChild(walletTab);
-    //   walletTab.addEventListener("click", function () {
-    //     tabDiv.querySelector(".selected").classList.remove('selected');
-    //     walletTab.classList.add("selected");
-    //     errorDiv.innerHTML = "";
-    //     activeTab = "wallet"
-    //     var formElemDiv = superParent.querySelector("#easyload");
-    //     formElemDiv.innerHTML = "";
-    //     //renderWalletElements(formElemDiv);
-    //     resizeIframe();
-    //   });
+    if (paymentMethods.includes('wallet') && initSettings.paymentMethods.includes('wallet')) {
+      var walletTab = document.createElement('div');
+      walletTab.classList.add("method-card","group","lex","flex-col","gap-1","rounded-lg","border-2",initSettings?.apperanceSettings?.theme === "light" ? "border-light-200":"border-dark-200","hover:border-primary-300","cursor-pointer","min-w-[120px]","p-3");
+      // Change this to localhost url for load image locally.
+      // walletTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? appUrl + '/img/wallet.svg' : appUrl + '/img/wallet-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
+      walletTab.innerHTML = '<img src="'+(initSettings?.apperanceSettings?.theme === "light" ? 'http://localhost:5000/v1/img/wallet.svg' : 'http://localhost:5000/v1/img/wallet-light.svg')+'" width="24" height="24"/><p class="card-label secondary-font text-sm font-medium text-light-400 group-hover:text-primary-300">Wallet</p>';
+      if(activeTab == "wallet"){
+        activeTab = "wallet"
+        walletTab.classList.add("selected");
+      }
+      tabDiv.appendChild(walletTab);
+      walletTab.addEventListener("click", function () {
+        tabDiv.querySelector(".selected").classList.remove('selected');
+        walletTab.classList.add("selected");
+        errorDiv.innerHTML = "";
+        activeTab = "wallet"
+        var formElemDiv = superParent.querySelector("#easyload");
+        formElemDiv.innerHTML = "";
+        renderWalletElements(formElemDiv);
+        resizeIframe();
+      });
 
-    // }
+    }
     tabParent.appendChild(tabDiv);
 
   }
@@ -3201,18 +3209,32 @@ const isCryptoPaymentSuccess  = async () => {
         root_theme.style.setProperty('--secondary-hover', apperanceSettings.secondary_btn_hover_col);
       }
 
-      if(intSettingsLength>0 && initApperanceSettings.borderRadious && initApperanceSettings.borderRadious!=""){
-        root_theme.style.setProperty('--border-radious', initApperanceSettings.borderRadious+"px"); 
+      if(intSettingsLength>0 && initApperanceSettings.borderRadius && initApperanceSettings.borderRadius!=""){
+        root_theme.style.setProperty('--border-radius', initApperanceSettings.borderRadius+"px"); 
       }
       else if(apiSettingsLength>0){
-        root_theme.style.setProperty('--border-radious', apperanceSettings.border_radious+"px");
+        root_theme.style.setProperty('--border-radius', apperanceSettings.border_radious+"px");
       }
       
       if(intSettingsLength>0 && initApperanceSettings.fontSize && initApperanceSettings.fontSize!=""){
         root_theme.style.setProperty('--font-size', initApperanceSettings.fontSize+"px"); 
       }
       else if (apiSettingsLength>0){
-        root_theme.style.setProperty('--font-size', initApperanceSettings.font_size+"px"); 
+        root_theme.style.setProperty('--font-size', apperanceSettings.font_size+"px"); 
+      }
+      
+      if(intSettingsLength>0 && initApperanceSettings.fontFamily && initApperanceSettings.fontFamily!=""){
+        root_theme.style.setProperty('--font-family', initApperanceSettings.fontFamily); 
+      }
+      else if(apiSettingsLength>0){
+        root_theme.style.setProperty('--font-family', apperanceSettings.font_family);
+      }
+
+      if(intSettingsLength>0 && initApperanceSettings.fontWeight && initApperanceSettings.fontWeight!=""){
+        root_theme.style.setProperty('--font-weight', initApperanceSettings.fontWeight); 
+      }
+      else if(apiSettingsLength>0){
+        root_theme.style.setProperty('--font-weight', apperanceSettings.font_weight);
       }
     
   }
@@ -3330,7 +3352,7 @@ const isCryptoPaymentSuccess  = async () => {
     snackBarDiv.id ="snackbar"
     form.appendChild(snackBarDiv);
     let footer = document.createElement("div");
-    footer.classList.add("mt-8","text-center","uppercase","font-medium","text-xs","text-light-50","flex","justify-between","items-center");
+    footer.classList.add("mt-8","text-center","uppercase","font-medium","text-xs",initSettings?.apperanceSettings?.theme === "light" ?"text-light-50":"text-dark-50","flex","justify-between","items-center");
     let companyNameDiv = document.createElement("p");
     companyNameDiv.classList.add("text-left");
     companyNameDiv.innerHTML = "POWERED BY "+companyName;
@@ -3388,7 +3410,7 @@ const isCryptoPaymentSuccess  = async () => {
 
   var renderMainContainer = function (parentElem) {
     containerDiv = parentElem.createElement('div');
-    containerDiv.classList.add("h-screen","flex","justify-center","items-center","p-4","bg-background");
+    containerDiv.classList.add("h-screen","flex","justify-center","items-center","pt-2","pl-4","pr-4","bg-background");
     containerDiv.id = 'container';
     formContainer = document.createElement('div');
     formContainer.classList.add("p-relative","form-container","max-h-[90%]","h-fit","overflow-y-scroll","p-8","w-full","lg:w-[640px]","bg-white","rounded-lg");

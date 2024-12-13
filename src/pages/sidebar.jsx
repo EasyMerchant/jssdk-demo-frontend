@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FieldsOptions from './FieldsOptions';
+import AppearanceSettings from './AppearanceSettings';
 
 const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
+    const [appearance, setAppearance] = useState(false);
+    const [optionsToggle, setOptionsToggle] = useState({
+        additionalFieldsOptions: true,
+        paymentOptions: true,
+        fieldsOptions: false
+    });
     const {
         paymentMethods,
         saveCard,
@@ -11,6 +18,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         showReceipt,
         showTotal,
         tokenOnly,
+        currency,
+        amount,
         showSubmitButton,
         fields: { billing, additional },
         apperanceSettings,
@@ -28,6 +37,13 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             return { ...prevOptions, paymentMethods: updatedMethods };
         });
     };
+    const handleTogglePaymentMEthods = (event) => {
+        const { checked } = event.target
+        setCustomizeOptions((pervData) => ({
+            ...pervData,
+            paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : []
+        }))
+    }
     const handleInputChange = (event) => {
         const { name, value } = event.target
         setCustomizeOptions((prevData) => ({
@@ -38,10 +54,24 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
 
     const handleCardCheckboxChange = (event) => {
         const { name, checked } = event.target
-        setCustomizeOptions((prevOptions) => ({
-            ...prevOptions,
-            [name]: checked,
-        }))
+        if (name === "tokenOnly") {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+                showReceipt: !checked
+            }));
+        } else if (name === "showSubmitButton") {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+                submitButtonText: checked ? "Submit" : ""
+            }));
+        } else {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                [name]: checked,
+            }));
+        }
     };
 
     const handleFieldsRender = (event) => {
@@ -107,13 +137,36 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         }
     };
 
-    const handleThemChange = (event) => {
-        const { name, checked } = event.target;
+    const handleThemChange = (checked) => {
         setCustomizeOptions((prevOptions) => ({
             ...prevOptions,
             apperanceSettings: {
                 ...prevOptions.apperanceSettings,
-                [name]: checked ? "dark" : "light"
+                ...(checked ? {
+                    bodyBackgroundColor: "#111827",
+                    containerBackgroundColor: "#1f2937",
+                    primaryFontColor: "#FFFFFF",
+                    secondaryFontColor: "#c5c5c5",
+                    primaryButtonBackgroundColor: "#0090e7",
+                    primaryButtonHoverColor: "#26a1eb",
+                    primaryButtonFontColor: "#e4e4e4",
+                    secondaryButtonBackgroundColor: "#0d0d0d",
+                    secondaryButtonHoverColor: "#ffffff",
+                    secondaryButtonFontColor: "#e4e4e4",
+                    theme: "dark",
+                } : {
+                    bodyBackgroundColor: "#eeeff2",
+                    containerBackgroundColor: "#ffffff",
+                    primaryFontColor: "#000000",
+                    secondaryFontColor: "#666666",
+                    primaryButtonBackgroundColor: "#1757d9",
+                    primaryButtonHoverColor: "#3a70df",
+                    primaryButtonFontColor: "#ffffff",
+                    secondaryButtonBackgroundColor: "#ffffff",
+                    secondaryButtonHoverColor: "#1757d9",
+                    secondaryButtonFontColor: "#1757d9",
+                    theme: "light",
+                }),
             }
         }));
     }
@@ -133,587 +186,474 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         handleRenderUpdate();
     };
 
+    const handleAppearanceToggle = (value) => setAppearance(value);
+
 
     return (
         <div
             id="drawer-navigation"
-            className="w-96 min-w-60 h-screen p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800"
+            className="relative w-392 scrollbar-hidden h-screen pb-6 overflow-y-auto transition-transform bg-white dark:bg-gray-800"
             tabIndex={ -1 }
             aria-labelledby="drawer-navigation-label"
         >
-            <h5
-                id="drawer-navigation-label"
-                className="text-base font-semibold text-gray-500 uppercase dark:text-gray- px-2 py-3 rounded-xl"
-            >
-                Appearance Settings
-            </h5>
-            <div className="py-4 overflow-y-auto">
-                <ul className="mt-2 font-medium">
-                    {/* Submit Button Text */ }
-                    <li className="mt-2">
-                        <label htmlFor="submit_btn_text" className="block mb-2 px-4 text-sm font-medium text-gray-900 dark:text-white">Submit Button Text</label>
-                        <input type="text" id="submit_btn_text" className="bg-gray-50 px-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter a value" value={ submitButtonText } onChange={ handleInputChange } />
-                    </li>
-                    {/* Theme Options List */ }
-                    <li className="mt-2">
-                        <a
-                            id="account-options-fields"
-                            href="#"
-                            className="flex items-center justify-between p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Theme</span>
-                            <label htmlFor="toggle" className="flex items-center cursor-pointer gap-1">
-                                <div className="relative">
-                                    <input
-                                        id="toggle"
-                                        type="checkbox"
-                                        name='them'
-                                        className="hidden"
-                                        checked={ apperanceSettings.them === "dark" }
-                                        onChange={ handleThemChange }
-                                    />
-                                    <div
-                                        className={ `block w-12 h-6 rounded-full ${apperanceSettings.them === "dark" ? 'bg-gray-700' : 'bg-gray-300'
-                                            }` }
-                                    ></div>
-                                    <div
-                                        className={ `dot absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${apperanceSettings.them === "dark" ? 'transform translate-x-6' : ''
-                                            }` }
-                                    ></div>
-                                </div>
-                                <p className='text-gray-900'>{ apperanceSettings.them }</p>
-                            </label>
-                        </a>
-                    </li>
-                    {/* Payment Options List */ }
-                    <li>
-                        <a
-                            onClick={ () => handleSidebarToggle("payment-options") }
-                            id="sidebar-list-payment-options"
-                            href="#"
-                            className="flex items-center p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Payment Options</span>
-                        </a>
-                        <ul
-                            id="payment-options"
-                            className="hidden w-full min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            { optionsArray.map((method, index) => {
-                                return (
-                                    <li
-                                        key={ method }
-                                        className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
-                                    >
-                                        <div className="flex items-center ps-3">
-                                            <input
-                                                id={ `${method}-checkbox` }
-                                                type="checkbox"
-                                                checked={ paymentMethods.includes(method) }
-                                                onChange={ () => handleCheckboxChange(method) }
-                                                className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                            />
-                                            <label
-                                                htmlFor={ `${method}-checkbox` }
-                                                className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                            >
-                                                { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
-                                            </label>
-                                        </div>
-                                    </li>
-                                )
-                            }) }
-                        </ul>
-                    </li>
-                    {/* Card Options List */ }
-                    <li className="mt-2">
-                        <a
-                            id="payment-options-card"
-                            href="#"
-                            onClick={ () => handleSidebarToggle("payment-card-options") }
-                            className="flex items-center p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Card</span>
-                        </a>
-                        <ul
-                            id="payment-card-options"
-                            className="hidden w-full min-w-48 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="save-card-checkbox"
-                                        type="checkbox"
-                                        name='saveCard'
-                                        checked={ saveCard }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="save-card-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Save Card
-                                    </label>
-                                </div>
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="scan-card-checkbox"
-                                        type="checkbox"
-                                        name='scanCard'
-                                        checked={ scanCard }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="scan-card-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Scan Card
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    {/* Fields Options List */ }
-                    <li className="mt-2">
-                        <a
-                            id="payment-options-fields"
-                            href="#"
-                            onClick={ () => handleSidebarToggle("payment-fields-options") }
-                            className="flex items-center p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Fields</span>
-                        </a>
-                        <ul
-                            id="payment-fields-options"
-                            className="hidden w-full min-w-48 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="billing-fields-checkbox"
-                                        type="checkbox"
-                                        name='billing'
-                                        checked={ billing.length > 0 }
-                                        onChange={ (event) => handleFieldsRender(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="billing-fields-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Billing Info
-                                    </label>
-                                </div>
-                                { billing.length > 0 && <FieldsOptions data={ billing } handleFieldsOptions={ handleFieldsOptions } type="billing" /> }
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="additional-fields-checkbox"
-                                        type="checkbox"
-                                        name='additional'
-                                        checked={ additional.length > 0 }
-                                        onChange={ (event) => handleFieldsRender(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="additional-fields-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Additional Info
-                                    </label>
-                                </div>
-                                { additional.length > 0 && <FieldsOptions data={ additional } handleFieldsOptions={ handleFieldsOptions } type="additional" /> }
-                            </li>
-                        </ul>
-                    </li>
-                    {/* Other Options List */ }
-                    <li className="mt-2">
-                        <a
-                            id="account-options-fields"
-                            href="#"
-                            onClick={ () => handleSidebarToggle("other-options") }
-                            className="flex items-center p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Other Options</span>
-                        </a>
-                        <ul
-                            id="other-options"
-                            className="hidden w-full min-w-48 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="save-account-checkbox"
-                                        type="checkbox"
-                                        name='saveAccount'
-                                        checked={ saveAccount }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="save-account-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Save Account
-                                    </label>
-                                </div>
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="show-receipt-checkbox"
-                                        type="checkbox"
-                                        name='showReceipt'
-                                        checked={ showReceipt }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="show-receipt-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Show Receipt
-                                    </label>
-                                </div>
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="show-total-checkbox"
-                                        type="checkbox"
-                                        name='showTotal'
-                                        checked={ showTotal }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="show-total-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Show Total
-                                    </label>
-                                </div>
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="show-submit-button-checkbox"
-                                        type="checkbox"
-                                        name='showSubmitButton'
-                                        checked={ showSubmitButton }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="show-submit-button-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Show Submit Button
-                                    </label>
-                                </div>
-                            </li>
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3">
-                                    <input
-                                        id="token-only-checkbox"
-                                        type="checkbox"
-                                        name='tokenOnly'
-                                        checked={ tokenOnly }
-                                        onChange={ (event) => handleCardCheckboxChange(event) }
-                                        className="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="token-only-checkbox"
-                                        className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Token Only
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    {/* Style Options List */ }
-                    <li className="mt-2">
-                        <a
-                            id="account-options-fields"
-                            href="#"
-                            onClick={ () => handleSidebarToggle("account-options") }
-                            className="flex items-center p-2 py-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <span className="ms-3">Style</span>
-                        </a>
-                        <ul
-                            id="account-options"
-                            className="hidden w-full min-w-48 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                <div className="flex items-center ps-3 flex-col">
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="color-picker-body-backgroundColor" className="text-sm font-medium">
-                                            Body BackgroundColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="color-picker-body-backgroundColor"
-                                                name='bodyBackgroundColor'
-                                                value={ apperanceSettings.bodyBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='bodyBackgroundColor'
-                                                value={ apperanceSettings.bodyBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="container-picker-body-backgroundColor" className="text-sm font-medium">
-                                            Container BackgroundColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="container-picker-body-backgroundColor"
-                                                name='containerBackgroundColor'
-                                                value={ apperanceSettings.containerBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='containerBackgroundColor'
-                                                value={ apperanceSettings.containerBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="primary-font-color" className="text-sm font-medium">
-                                            Primary FontColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="primary-font-color"
-                                                name='primaryFontColor'
-                                                value={ apperanceSettings.primaryFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='primaryFontColor'
-                                                value={ apperanceSettings.primaryFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="secondary-font-color" className="text-sm font-medium">
-                                            Secondary FontColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="secondary-font-color"
-                                                name='secondaryFontColor'
-                                                value={ apperanceSettings.secondaryFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='secondaryFontColor'
-                                                value={ apperanceSettings.secondaryFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="primary-button-background-color" className="text-sm font-medium">
-                                            Primary Button Background
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="primary-button-background-color"
-                                                name='primaryButtonBackgroundColor'
-                                                value={ apperanceSettings.primaryButtonBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='primaryButtonBackgroundColor'
-                                                value={ apperanceSettings.primaryButtonBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="primary-button-font-color" className="text-sm font-medium">
-                                            Primary Button FontColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="primary-button-font-color"
-                                                name='primaryButtonFontColor'
-                                                value={ apperanceSettings.primaryButtonFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='primaryButtonFontColor'
-                                                value={ apperanceSettings.primaryButtonFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="primary-button-hover-color" className="text-sm font-medium">
-                                            Primary Button HoverColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="primary-button-hover-color"
-                                                name='primaryButtonHoverColor'
-                                                value={ apperanceSettings.primaryButtonHoverColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='primaryButtonHoverColor'
-                                                value={ apperanceSettings.primaryButtonHoverColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="secondary-button-background-color" className="text-sm font-medium">
-                                            Secondary Button Background
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="secondary-button-background-color"
-                                                name='secondaryButtonBackgroundColor'
-                                                value={ apperanceSettings.secondaryButtonBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='secondaryButtonBackgroundColor'
-                                                value={ apperanceSettings.secondaryButtonBackgroundColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="secondary-button-font-color" className="text-sm font-medium">
-                                            Secondary Button FontColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="secondary-button-font-color"
-                                                name='secondaryButtonFontColor'
-                                                value={ apperanceSettings.secondaryButtonFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='secondaryButtonFontColor'
-                                                value={ apperanceSettings.secondaryButtonFontColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-col">
-                                        <label htmlFor="secondary-button-hover-color" className="text-sm font-medium">
-                                            Secondary Button HoverColor
-                                        </label>
-                                        <div className="flex items-center border rounded-md overflow-hidden">
-                                            <input
-                                                type="text"
-                                                id="secondary-button-hover-color"
-                                                name='secondaryButtonHoverColor'
-                                                value={ apperanceSettings.secondaryButtonHoverColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-24 px-2 py-1 text-sm border-none focus:outline-none"
-                                            />
-                                            <input
-                                                type="color"
-                                                name='secondaryButtonHoverColor'
-                                                value={ apperanceSettings.secondaryButtonHoverColor }
-                                                onChange={ handleAppearanceSettings }
-                                                className="w-10 h-10 border-l cursor-pointer"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mb-4">
-                                        <label htmlFor="fontSize" className="block text-sm font-medium text-gray-700">
-                                            Font Size
-                                        </label>
+            <div className='flex gap-4 sticky left-0 w-full top-0 z-30 py-4 px-2 justify-between items-center bg-slate-200'>
+                <h5
+                    id="drawer-navigation-label"
+                    className="text-base pt-0 px-0 font-semibold text-black capitalize dark:text-white rounded-xl"
+                >
+                    Appearance Settings
+                </h5>
+                <div className='flex gap-2'>
+                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
+                        <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                {" "}
+                                <path
+                                fill="currentColor"
+                                d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
+                                />{" "}
+                                <path
+                                fill="currentColor"
+                                d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
+                                />{" "}
+                            </g>
+                        </svg>
+
+
+                    </button>
+                    <button onClick={ () => toggleShowObject() } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
+                        <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M17 7.82959L18.6965 9.35641C20.239 10.7447 21.0103 11.4389 21.0103 12.3296C21.0103 13.2203 20.239 13.9145 18.6965 15.3028L17 16.8296"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                                <path
+                                    opacity="0.5"
+                                    d="M13.9868 5L10.0132 19.8297"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                                <path
+                                    d="M7.00005 7.82959L5.30358 9.35641C3.76102 10.7447 2.98975 11.4389 2.98975 12.3296C2.98975 13.2203 3.76102 13.9145 5.30358 15.3028L7.00005 16.8296"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                />
+                            </g>
+                        </svg>
+
+                    </button>
+                </div>
+            </div>
+            <div className="relative pt-10 px-6">
+                <div>
+                    <ul className="font-medium flex flex-col gap-4">
+                        {/* Theme Options List */ }
+                        <li className="">
+                            <a
+                                id="theme-options-fields"
+                                href="#"
+                                className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
+                            >
+                                <span className=" text-sm ">Theme</span>
+                            </a>
+                            <div className='flex gap-4 w-full h-20'>
+                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
+                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
+                            </div>
+                        </li>
+                        {/* Font Options */ }
+                        <li className="mt-8">
+                            <a
+                                id="appearance-options-fields"
+                                href="#"
+                                className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
+                            >
+                                <span className=" text-sm ">Appearance</span>
+                            </a>
+                            <div className='flex gap-4 w-full h-20'>
+                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <rect width="20" height="20" rx="10" fill="#1757D9" />
+                                    </svg>
+                                    <span>
+                                        Color
+                                    </span>
+                                </button>
+                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("font") }>
+                                    <span className=' text-sm text-xl h-5'>H1</span>
+                                    <span>Font</span>
+                                </button>
+                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("border") }>
+                                    <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.32292 2.5H4.82292C4.38089 2.5 3.95697 2.67559 3.64441 2.98816C3.33184 3.30072 3.15625 3.72464 3.15625 4.16667V6.66667M18.1562 6.66667V4.16667C18.1562 3.72464 17.9807 3.30072 17.6681 2.98816C17.3555 2.67559 16.9316 2.5 16.4896 2.5H13.9896M13.9896 17.5H16.4896C16.9316 17.5 17.3555 17.3244 17.6681 17.0118C17.9807 16.6993 18.1562 16.2754 18.1562 15.8333V13.3333M3.15625 13.3333V15.8333C3.15625 16.2754 3.33184 16.6993 3.64441 17.0118C3.95697 17.3244 4.38089 17.5 4.82292 17.5H7.32292" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                    <span>
+                                        Border
+                                    </span>
+                                </button>
+                            </div>
+                        </li>{/* Additional Options List */ }
+                        <li className="mt-8">
+                            <span className=" text-sm ">Additional Options</span>
+                            <div className='flex mt-4'>
+                                <input
+                                    id="additional-fields-options-checkbox"
+                                    type="checkbox"
+                                    checked={ optionsToggle.additionalFieldsOptions }
+                                    onChange={ () => {
+                                        handleSidebarToggle("additional-fields-options");
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, additionalFieldsOptions: !pervVal.additionalFieldsOptions }))
+                                    }
+                                    }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:transparent dark:ring-offset-transparent dark:focus:ring-offset-transparentfocus:ring-2 dark:bg-gray-600 dark:border-transparent"
+                                />
+                                <label
+                                    htmlFor="additional-fields-options-checkbox"
+                                    className="w-full ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Configure amount
+                                </label>
+                            </div>
+                            <ul
+                                id="additional-fields-options"
+                                className="w-full min-w-48 pl-8 pr-0 py-3 text-sm font-medium text-gray-900 bg-white"
+                            >
+                                <li className="w-full ">
+                                    <span className=' text-sm pt-0 py-0 mb-2 block'>Amount</span>
+                                    <div className="h-051 flex gap-4 flex-row items-center justify-center">
+                                        <select
+                                            name="currency"
+                                            value={ currency }
+                                            onChange={ handleInputChange }
+                                            className="appearance-none min-w-[50px] h-full text-center block w-auto py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            style={ {
+                                                background: 'none',
+                                                WebkitAppearance: 'none',
+                                                MozAppearance: 'none',
+                                                padding: '8px 16px'
+                                            } }
+                                        >
+                                            <option value="usd">US</option>
+                                            <option value="ind">IND</option>
+                                        </select>
                                         <input
-                                            type="range"
-                                            id="fontSize"
-                                            name="fontSize"
-                                            min="10"
-                                            max="20"
-                                            value={ apperanceSettings.fontSize }
-                                            onChange={ handleAppearanceSettings }
-                                            className="mt-2 w-full"
+                                            id="billing-fields-checkbox"
+                                            type="text"
+                                            name="amount"
+                                            value={ amount }
+                                            onChange={ handleInputChange }
+                                            className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Enter a value"
                                         />
-                                        <p className="text-sm mt-1">Font Size: { apperanceSettings.fontSize }px</p>
                                     </div>
-                                    <div className="mb-4">
-                                        <label htmlFor="borderRadious" className="block text-sm font-medium text-gray-700">
-                                            Border Radius
-                                        </label>
+                                </li>
+
+                            </ul>
+                        </li>
+                        {/* Fields Options List */ }
+                        <li className="">
+                            {/* <a
+                                id="payment-options-fields"
+                                href="#"
+                                onClick={ () => handleSidebarToggle("payment-fields-options") }
+                                className="flex items-center text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
+                            >
+                                <span className=" text-sm ">Fields</span>
+                            </a> */}
+                            <div className='flex my-3 '>
+                                <input
+                                    id="fields-checkbox"
+                                    type="checkbox"
+                                    checked={ optionsToggle.fieldsOptions }
+                                    onChange={ () => {
+                                        handleSidebarToggle("fields-options-checkbox")
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, fieldsOptions: !pervVal.fieldsOptions }))
+                                    }
+                                    }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="fields-checkbox"
+                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Fields
+                                </label>
+                            </div>
+                            <ul
+                                id="fields-options-checkbox"
+                                className="hidden w-full min-w-48  px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            >
+                                <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                    <div className="flex items-center gap-x-3">
                                         <input
-                                            type="range"
-                                            id="borderRadious"
-                                            name="borderRadious"
-                                            min="0"
-                                            max="50"
-                                            value={ apperanceSettings.borderRadious }
-                                            onChange={ handleAppearanceSettings }
-                                            className="mt-2 w-full"
+                                            id="billing-fields-checkbox"
+                                            type="checkbox"
+                                            name='billing'
+                                            checked={ billing.length > 0 }
+                                            onChange={ (event) => handleFieldsRender(event) }
+                                            className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
                                         />
-                                        <p className="text-sm mt-1">Border Radius: { apperanceSettings.borderRadious }px</p>
+                                        <label
+                                            htmlFor="billing-fields-checkbox"
+                                            className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                        >
+                                            Billing Info
+                                        </label>
                                     </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
-                <button onClick={ () => toggleShowObject() } className='mt-3 text-center w-full bg-blue-800 px-2 py-3 rounded-xl border-none text-white'>
-                    { showObject ? "Close" : "Show Code" }
-                </button>
+                                    { billing.length > 0 && <FieldsOptions data={ billing } handleFieldsOptions={ handleFieldsOptions } type="billing" /> }
+                                </li>
+                                <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                    <div className="flex items-center gap-x-3">
+                                        <input
+                                            id="additional-fields-checkbox"
+                                            type="checkbox"
+                                            name='additional'
+                                            checked={ additional.length > 0 }
+                                            onChange={ (event) => handleFieldsRender(event) }
+                                            className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                        />
+                                        <label
+                                            htmlFor="additional-fields-checkbox"
+                                            className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                        >
+                                            Additional Info
+                                        </label>
+                                    </div>
+                                    { additional.length > 0 && <FieldsOptions data={ additional } handleFieldsOptions={ handleFieldsOptions } type="additional" /> }
+                                </li>
+                            </ul>
+                        </li>
+                        {/* Card Options List */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="token-only-checkbox"
+                                    type="checkbox"
+                                    name='tokenOnly'
+                                    checked={ tokenOnly }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="token-only-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Token Only
+                                </label>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={ 20 }
+                                    height={ 20 }
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M7.5 7.66915C7.70163 7.11262 8.09962 6.64334 8.62346 6.34442C9.1473 6.0455 9.7632 5.93623 10.3621 6.03596C10.9609 6.1357 11.5041 6.43801 11.8954 6.88934C12.2867 7.34067 12.5009 7.91191 12.5 8.50186C12.5 10.1673 9.9271 11 9.9271 11"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M9.85156 14.2422H9.86156"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+
+                            </div>
+                        </li>
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="save-card-checkbox"
+                                    type="checkbox"
+                                    name='saveCard'
+                                    checked={ saveCard }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="save-card-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Save Card
+                                </label>
+                            </div>
+                        </li>
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="scan-card-checkbox"
+                                    type="checkbox"
+                                    name='scanCard'
+                                    checked={ scanCard }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="scan-card-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Scan Card
+                                </label>
+                            </div>
+                        </li>
+                        {/* Other Options List */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="save-account-checkbox"
+                                    type="checkbox"
+                                    name='saveAccount'
+                                    checked={ saveAccount }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="save-account-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Save Account
+                                </label>
+                            </div>
+                        </li>
+                        { !tokenOnly && <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-receipt-checkbox"
+                                    type="checkbox"
+                                    name='showReceipt'
+                                    checked={ showReceipt }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="show-receipt-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Show Receipt
+                                </label>
+                            </div>
+                        </li> }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-total-checkbox"
+                                    type="checkbox"
+                                    name='showTotal'
+                                    checked={ showTotal }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="show-total-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Show Total
+                                </label>
+                            </div>
+                        </li>
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-submit-button-checkbox"
+                                    type="checkbox"
+                                    name='showSubmitButton'
+                                    checked={ showSubmitButton }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="show-submit-button-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Show Submit Button
+                                </label>
+                            </div>
+                        </li>
+                        {/* Submit Button Text */ }
+                        { showSubmitButton && <li className="pl-8">
+                            <label htmlFor="submit_btn_text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Submit Button Text</label>
+                            <input type="text" id="submit_btn_text" name="submitButtonText" className="bg-gray-50 px-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter a value" value={ submitButtonText } onChange={ handleInputChange } />
+                        </li> }
+                        {/* Payment Options List */ }
+                        <li>
+                            <div className='flex my-3 '>
+                                <input
+                                    id="payment-method-checkbox"
+                                    type="checkbox"
+                                    checked={ optionsToggle.paymentOptions }
+                                    onChange={ (event) => {
+                                        handleSidebarToggle("payment-options");
+                                        handleTogglePaymentMEthods(event);
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, paymentOptions: !pervVal.paymentOptions }));
+                                    }
+                                    }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="payment-method-checkbox"
+                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Payment method
+                                </label>
+                            </div>
+                            <ul
+                                id="payment-options"
+                                className="w-full min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            >
+                                { optionsArray.map((method, index) => {
+                                    return (
+                                        <li
+                                            key={ method }
+                                            className="w-full py-1 rounded-t-lg dark:border-gray-600"
+                                        >
+                                            <div className="flex items-center gap-x-3">
+                                                <input
+                                                    id={ `${method}-checkbox` }
+                                                    type="checkbox"
+                                                    checked={ paymentMethods.includes(method) }
+                                                    onChange={ () => handleCheckboxChange(method) }
+                                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                                />
+                                                <label
+                                                    htmlFor={ `${method}-checkbox` }
+                                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                                >
+                                                    { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
+                                                </label>
+                                            </div>
+                                        </li>
+                                    )
+                                }) }
+                            </ul>
+                        </li>
+                    </ul>
+                    {/* <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
+                    <button onClick={ () => toggleShowObject() } className='mt-3 text-center w-full bg-blue-800 px-2 py-3 rounded-xl border-none text-white'>
+                        { showObject ? "Close" : "Show Code" }
+                    </button> */}
+                </div>
+                { appearance && <AppearanceSettings appearance={ appearance } handleAppearanceToggle={ handleAppearanceToggle } apperanceSettings={ apperanceSettings } handleAppearanceSettings={ handleAppearanceSettings } /> }
             </div>
         </div>
     );

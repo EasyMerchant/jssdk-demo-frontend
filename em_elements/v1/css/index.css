@@ -5,14 +5,19 @@
   --primary-hover: #3a70df;
   --secondary-color: #ffffff;
   --secondary-hover: #1757d9;
-  --border-radious:8px;
+  --border-radius:8px;
   --font-size:16px;
+  --font-family:"Roboto", sans-serif;
+  --font-weight:400;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: var(--font-family) !important;
+  font-weight: var(--font-weight) !important;
+  font-style: normal;
 }
 
 .primary-font{
@@ -21,6 +26,17 @@
 
 .primary-font-svg{
   fill:var(--primary-color) !important ;
+}
+.border-dark-200 {
+  border-color: #ffffff29;
+}
+.border-dark-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(75 75 75);
+}
+
+.text-dark-50 {
+  color: #ffffff61;
 }
 
 ::-webkit-scrollbar {
@@ -52,7 +68,7 @@ select {
   background-size: 12px 9.4px !important;
 }
 button,input,select{
-  border-radius: var(--border-radious) !important;
+  border-radius: var(--border-radius) !important;
 }
 button,input,select,p{
   font-size: var(--font-size) !important;
