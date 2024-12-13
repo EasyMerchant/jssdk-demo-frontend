@@ -11,17 +11,17 @@ const PaymentOptions = () => {
   const [customizeOptions, setCustomizeOptions] = useState({
     container: 'payments',
     environment: "stage",
-    amount: 55.68,
-    tokenOnly: true,
+    amount: 10.50,
+    tokenOnly: false,
     currency: "usd",
     saveCard: true,
-    scanCard: true,
+    // scanCard: true,
     saveAccount: true,
     submitButtonText: "Submit",
     showReceipt: true,
     showTotal: true,
     showSubmitButton: true,
-    paymentMethods: ['card', "ach", "crypto", "wallet"],
+    paymentMethods: ['card', "ach", "crypto"],
     fields: {
       billing: [
         { name: 'address', required: true, value: 'Test ACH Address' },

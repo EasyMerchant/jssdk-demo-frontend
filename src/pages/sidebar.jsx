@@ -7,13 +7,14 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     const [appearance, setAppearance] = useState(false);
     const [optionsToggle, setOptionsToggle] = useState({
         additionalFieldsOptions: true,
+        appearanceSettings:true,
         paymentOptions: true,
         fieldsOptions: false
     });
     const {
         paymentMethods,
         saveCard,
-        scanCard,
+        // scanCard,
         saveAccount,
         showReceipt,
         showTotal,
@@ -49,6 +50,12 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         setCustomizeOptions((prevData) => ({
             ...prevData,
             [name]: value
+        }))
+    }
+    const handleInputBlur = (value) => {
+        setCustomizeOptions((prevData) => ({
+            ...prevData,
+            amount: value
         }))
     }
 
@@ -188,7 +195,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
 
     const handleAppearanceToggle = (value) => setAppearance(value);
 
-
     return (
         <div
             id="drawer-navigation"
@@ -201,23 +207,23 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     id="drawer-navigation-label"
                     className="text-base pt-0 px-0 font-semibold text-black capitalize dark:text-white rounded-xl"
                 >
-                    Appearance Settings
+                    JS SDK Demo
                 </h5>
                 <div className='flex gap-2'>
                     <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
                         <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
-                            <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
                             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
                             <g id="SVGRepo_iconCarrier">
-                                {" "}
+                                { " " }
                                 <path
-                                fill="currentColor"
-                                d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
-                                />{" "}
+                                    fill="currentColor"
+                                    d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
+                                />{ " " }
                                 <path
-                                fill="currentColor"
-                                d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
-                                />{" "}
+                                    fill="currentColor"
+                                    d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
+                                />{ " " }
                             </g>
                         </svg>
 
@@ -256,54 +262,68 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             <div className="relative pt-10 px-6">
                 <div>
                     <ul className="font-medium flex flex-col gap-4">
-                        {/* Theme Options List */ }
                         <li className="">
-                            <a
-                                id="theme-options-fields"
-                                href="#"
-                                className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
-                            >
-                                <span className=" text-sm ">Theme</span>
-                            </a>
-                            <div className='flex gap-4 w-full h-20'>
-                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
-                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
+                            <div className='flex my-3 '>
+                                <input
+                                    id="appearance-settings-checkbox"
+                                    type="checkbox"
+                                    checked={ optionsToggle.appearanceSettings }
+                                    onChange={ () => {
+                                        handleSidebarToggle("appearance-settings-fields")
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, appearanceSettings: !pervVal.appearanceSettings }))
+                                    }
+                                    }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="appearance-settings-checkbox"
+                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Appearance Settings
+                                </label>
+                            </div>
+                            
+                            <div  id="appearance-settings-fields" className='w-full'>
+                                <div className='flex gap-4 w-full h-20'>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
+                                </div>
+                                {/* </li> */ }
+                                {/* Font Options */ }
+                                {/* <li className="mt-8">
+                                <a
+                                    id="appearance-options-fields"
+                                    href="#"
+                                    className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
+                                >
+                                    <span className=" text-sm ">Appearance</span>
+                                </a> */}
+                                <div className='mt-4 flex gap-4 w-full h-20'>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <rect width="20" height="20" rx="10" fill="#1757D9" />
+                                        </svg>
+                                        <span>
+                                            Color
+                                        </span>
+                                    </button>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("font") }>
+                                        <span className=' text-sm text-xl h-5'>H1</span>
+                                        <span>Font</span>
+                                    </button>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("border") }>
+                                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.32292 2.5H4.82292C4.38089 2.5 3.95697 2.67559 3.64441 2.98816C3.33184 3.30072 3.15625 3.72464 3.15625 4.16667V6.66667M18.1562 6.66667V4.16667C18.1562 3.72464 17.9807 3.30072 17.6681 2.98816C17.3555 2.67559 16.9316 2.5 16.4896 2.5H13.9896M13.9896 17.5H16.4896C16.9316 17.5 17.3555 17.3244 17.6681 17.0118C17.9807 16.6993 18.1562 16.2754 18.1562 15.8333V13.3333M3.15625 13.3333V15.8333C3.15625 16.2754 3.33184 16.6993 3.64441 17.0118C3.95697 17.3244 4.38089 17.5 4.82292 17.5H7.32292" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <span>
+                                            Border
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         </li>
-                        {/* Font Options */ }
-                        <li className="mt-8">
-                            <a
-                                id="appearance-options-fields"
-                                href="#"
-                                className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
-                            >
-                                <span className=" text-sm ">Appearance</span>
-                            </a>
-                            <div className='flex gap-4 w-full h-20'>
-                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <rect width="20" height="20" rx="10" fill="#1757D9" />
-                                    </svg>
-                                    <span>
-                                        Color
-                                    </span>
-                                </button>
-                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("font") }>
-                                    <span className=' text-sm text-xl h-5'>H1</span>
-                                    <span>Font</span>
-                                </button>
-                                <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("border") }>
-                                    <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.32292 2.5H4.82292C4.38089 2.5 3.95697 2.67559 3.64441 2.98816C3.33184 3.30072 3.15625 3.72464 3.15625 4.16667V6.66667M18.1562 6.66667V4.16667C18.1562 3.72464 17.9807 3.30072 17.6681 2.98816C17.3555 2.67559 16.9316 2.5 16.4896 2.5H13.9896M13.9896 17.5H16.4896C16.9316 17.5 17.3555 17.3244 17.6681 17.0118C17.9807 16.6993 18.1562 16.2754 18.1562 15.8333V13.3333M3.15625 13.3333V15.8333C3.15625 16.2754 3.33184 16.6993 3.64441 17.0118C3.95697 17.3244 4.38089 17.5 4.82292 17.5H7.32292" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    <span>
-                                        Border
-                                    </span>
-                                </button>
-                            </div>
-                        </li>{/* Additional Options List */ }
-                        <li className="mt-8">
-                            <span className=" text-sm ">Additional Options</span>
+                        {/* Additional Options List */ }
+                        <li className="">
                             <div className='flex mt-4'>
                                 <input
                                     id="additional-fields-options-checkbox"
@@ -351,6 +371,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                             name="amount"
                                             value={ amount }
                                             onChange={ handleInputChange }
+                                            onBlur={ e => handleInputBlur(Number(amount).toFixed(2)) }
                                             className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Enter a value"
                                         />
@@ -361,14 +382,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
-                            {/* <a
-                                id="payment-options-fields"
-                                href="#"
-                                onClick={ () => handleSidebarToggle("payment-fields-options") }
-                                className="flex items-center text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
-                            >
-                                <span className=" text-sm ">Fields</span>
-                            </a> */}
                             <div className='flex my-3 '>
                                 <input
                                     id="fields-checkbox"
@@ -499,7 +512,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </label>
                             </div>
                         </li>
-                        <li className="w-full">
+                        {/* <li className="w-full">
                             <div className="flex items-center gap-x-3">
                                 <input
                                     id="scan-card-checkbox"
@@ -516,7 +529,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     Scan Card
                                 </label>
                             </div>
-                        </li>
+                        </li> */}
                         {/* Other Options List */ }
                         <li className="w-full">
                             <div className="flex items-center gap-x-3">
@@ -631,15 +644,18 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 <input
                                                     id={ `${method}-checkbox` }
                                                     type="checkbox"
-                                                    checked={ paymentMethods.includes(method) }
-                                                    onChange={ () => handleCheckboxChange(method) }
-                                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                                    checked={ method === "wallet" ? false : paymentMethods.includes(method) }
+                                                    onChange={ () => method === "wallet" ? console.log("coming soon") :
+                                                        handleCheckboxChange(method) }
+                                                    disabled={ method === "wallet" }
+                                                    className={ `${method === "wallet" ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
                                                 />
                                                 <label
                                                     htmlFor={ `${method}-checkbox` }
-                                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                                    className="flex gap-7 w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                                 >
                                                     { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
+                                                    { method === "wallet" && <span className='text-left text-slate-500'>coming soon</span> }
                                                 </label>
                                             </div>
                                         </li>
@@ -648,10 +664,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </ul>
                         </li>
                     </ul>
-                    {/* <button className='mt-3 text-center w-full bg-zinc-400 px-2 py-3 rounded-xl border-none' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>Apply Change</button>
-                    <button onClick={ () => toggleShowObject() } className='mt-3 text-center w-full bg-blue-800 px-2 py-3 rounded-xl border-none text-white'>
-                        { showObject ? "Close" : "Show Code" }
-                    </button> */}
                 </div>
                 { appearance && <AppearanceSettings appearance={ appearance } handleAppearanceToggle={ handleAppearanceToggle } apperanceSettings={ apperanceSettings } handleAppearanceSettings={ handleAppearanceSettings } /> }
             </div>
