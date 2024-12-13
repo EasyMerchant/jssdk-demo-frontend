@@ -8,7 +8,7 @@ const defaultOptions = {
 }
 export default async (request, context) => {
   try {
-    let env = Netlify.env.get("API_ENVIRONMENT");
+    const env = Netlify.env.get("API_ENVIRONMENT");
     let base_url = "https://stage-api.stage-easymerchant.io/api/v1";
     if (env == 'production') {
       base_url = "https://api.lyfepay.io/api/v1";
@@ -16,14 +16,18 @@ export default async (request, context) => {
       base_url = "https://sandbox-api.sandbox-lyfepay.io/api/v1";
     }
     const response = await fetch(base_url+"/paymentintent", defaultOptions);
+    console.log({response})
     const data = await response.json();
     return new Response(JSON.stringify({
       statusCode: 201,
+      env,
       body: data
     }));
   } catch (error) {
+    console.log({error})
     return new Response(error.toString(), {
       statusCode: 500,
+      env,
       body: JSON.stringify(error)
     })
   }

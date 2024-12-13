@@ -72,7 +72,8 @@ const PaymentOptions = () => {
       elements = new lyfPayCheckout(client_token);
       elements.create({
         ...customizeOptions,
-        amount
+        amount,
+        environment: json.env
       });
 
       // On Ready Event -  it will trigger once all elements render successfully
