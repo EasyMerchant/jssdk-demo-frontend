@@ -2717,3 +2717,23 @@ input:checked + .toggle-bg {
   ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
 }
+
+
+input[type="color" i]::-webkit-color-swatch {
+  @apply border border-gray-100 rounded-lg;
+}
+.select__input-container {
+&:after {
+  @apply hidden;
+}
+}
+.select__input-container  {
+.select__input {
+  @apply border-0 !min-w-0;
+}
+}
+.basic-single  {
+.select__control {
+  @apply !rounded-lg;
+}
+}

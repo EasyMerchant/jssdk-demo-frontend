@@ -22,7 +22,7 @@ const ResponsiveButton = ({paymentsRef}) => {
         <div className="relative w-full h-full flex justify-center">
             {/* Fixed buttons for responsiveness */}
             <div className="fixed top-0 my-3 flex justify-center z-10">
-                <div className="flex justify-center space-x-4 py-2 px-3 rounded-xl bg-white shadow-md">
+                <div className="flex justify-center space-x-4 py-2 px-3 rounded-xl">
                     {devices.map(({ type, width, icon, alt }) => (
                         <button
                             key={type}

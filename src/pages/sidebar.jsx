@@ -277,25 +277,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     Appearance Settings
                 </h5>
                 <div className='flex gap-2'>
-                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
-                        <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
-                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
-                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
-                            <g id="SVGRepo_iconCarrier">
-                                { " " }
-                                <path
-                                    fill="currentColor"
-                                    d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
-                                />{ " " }
-                                <path
-                                    fill="currentColor"
-                                    d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
-                                />{ " " }
-                            </g>
-                        </svg>
-
-
-                    </button>
+                   
                     <button onClick={ () => toggleShowObject() } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
                         <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
@@ -324,6 +306,25 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </svg>
 
                     </button>
+                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
+                        <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                { " " }
+                                <path
+                                    fill="currentColor"
+                                    d="M472.971,122.344,373.656,23.029A23.838,23.838,0,0,0,356.687,16H56A24.028,24.028,0,0,0,32,40V472a24.028,24.028,0,0,0,24,24H456a24.028,24.028,0,0,0,24-24V139.313A23.838,23.838,0,0,0,472.971,122.344ZM320,48v96H176V48ZM448,464H64V48h80V176H352V48h1.373L448,142.627Z"
+                                />{ " " }
+                                <path
+                                    fill="currentColor"
+                                    d="M252,224a92,92,0,1,0,92,92A92.1,92.1,0,0,0,252,224Zm0,152a60,60,0,1,1,60-60A60.068,60.068,0,0,1,252,376Z"
+                                />{ " " }
+                            </g>
+                        </svg>
+
+
+                    </button>
                 </div>
             </div>
             <div className="relative pt-10 px-6">
@@ -331,7 +332,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     <ul className="font-medium flex flex-col gap-4">
                         {/* Theme Options List */ }
                         <li className="">
-                            <div className='flex my-3 '>
+                            <div className='flex'>
                                 <input
                                     id="appearance-settings-checkbox"
                                     type="checkbox"
@@ -352,12 +353,19 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </label>
                             </div>
 
-                            <div id="appearance-settings-fields" className='w-full'>
-                                <div className='flex gap-4 w-full h-20'>
+                            <div id="appearance-settings-fields" className='w-full'>                           
+                                <div className='flex gap-4 w-full h-20 mt-3'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings?.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings?.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
                                 </div>
-                                <div className='mt-4 flex gap-4 w-full h-20'>
+                                <div className='mt-6'>
+                                <label
+                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Appearance
+                                </label>
+                                </div>
+                                <div className='my-4 flex gap-4 w-full h-20'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                             <rect width="20" height="20" rx="10" fill="#1757D9" />
@@ -382,8 +390,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                         </li>
                         {/* Configure amount */ }
-                        <li className="mt-8">
-                            <div className='flex mt-4'>
+                        <li className="mt-0">
+                            <div className='flex mt-0'>
                                 <input
                                     id="additional-fields-options-checkbox"
                                     type="checkbox"
@@ -405,7 +413,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                             <ul
                                 id="additional-fields-options"
-                                className="w-full min-w-48 pl-8 pr-0 py-3 text-sm font-medium text-gray-900 bg-white"
+                                className="w-full min-w-48 pl-8 pr-0 pt-3 text-sm font-medium text-gray-900 bg-white"
                             >
                                 <li className="w-full ">
                                     <span className=' text-sm pt-0 py-0 mb-2 block'>Amount</span>
@@ -424,14 +432,14 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     </div>
                                 </li>
                             </ul>
-                            { !optionsToggle.additionalFieldsOptions && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
-                                <p className="font-bold">Note:</p>
-                                <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
-                            </div> }
+                           {!optionsToggle.additionalFieldsOptions&& <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mt-3" role="alert">
+                                    <p className="font-bold">Note:</p>
+                                    <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
+                                </div>}
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
-                            <div className='flex my-3 '>
+                            <div className='flex'>
                                 <input
                                     id="fields-checkbox"
                                     type="checkbox"
@@ -453,7 +461,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                             <ul
                                 id="fields-options-checkbox"
-                                className="hidden w-full min-w-48  px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                className="hidden w-full min-w-48 mt-3  px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             >
                                 <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
                                     <div className="flex items-center gap-x-3">
@@ -497,7 +505,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </li>
                         {/* Payment Options List */ }
                         <li>
-                            <div className='flex my-3 '>
+                            <div className='flex'>
                                 <input
                                     id="payment-method-checkbox"
                                     type="checkbox"
@@ -519,7 +527,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                             <ul
                                 id="payment-options"
-                                className="w-full min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                className="w-full mt-3 min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             >
                                 { optionsArray.map((method, index) => {
                                     return (
@@ -539,7 +547,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 />
                                                 <label
                                                     htmlFor={ `${method}-checkbox` }
-                                                    className={ `${method === "wallet" ? "cursor-not-allowed text-gray-500" : "cursor-pointer text-gray-900"} flex gap-7 w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                                    className="flex gap-7 w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                                 >
                                                     { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
                                                     { method === "wallet" && <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">coming soon</span> }
@@ -558,17 +566,16 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     type="checkbox"
                                     name='tokenOnly'
                                     checked={ tokenOnly }
-                                    disabled={ !paymentMethods.includes("card") && !paymentMethods.includes("ach") }
                                     onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className={ `${!paymentMethods.includes("card") && !paymentMethods.includes("ach") ? "!cursor-not-allowed" : "!cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
                                 />
                                 <label
                                     htmlFor="token-only-checkbox"
-                                    className={ `${!paymentMethods.includes("card") && !paymentMethods.includes("ach") ? "!cursor-not-allowed  text-gray-500" : "!cursor-pointer  text-gray-900"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
                                     Token Only
                                 </label>
-                                <Tooltip text={ "When enabled we do not process payment but only tokenise the card/account." } ><svg
+                                <Tooltip text={"When enabled we do not process payment but only tokenise the card/account."} ><svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width={ 20 }
                                     height={ 20 }
