@@ -86,3 +86,38 @@ export const fontFamilyList = [
         value:`"Roboto Mono", monospace`,
     },
 ] 
+
+
+
+export const countryCurrency = [
+    { value: 'usd', label: 'USD' }, // United States Dollar
+    { value: 'ind', label: 'INR' }, // Indian Rupee
+    { value: 'uk', label: 'GBP' }, // British Pound Sterling
+    { value: 'eur', label: 'EUR' }, // Euro
+    { value: 'jpn', label: 'JPY' }, // Japanese Yen
+    { value: 'chn', label: 'CNY' }, // Chinese Yuan
+    { value: 'aus', label: 'AUD' }, // Australian Dollar
+    { value: 'cad', label: 'CAD' }, // Canadian Dollar
+    { value: 'sgp', label: 'SGD' }, // Singapore Dollar
+    { value: 'nzl', label: 'NZD' }, // New Zealand Dollar
+    { value: 'saf', label: 'ZAR' }, // South African Rand
+    { value: 'chf', label: 'CHF' }, // Swiss Franc
+    { value: 'brl', label: 'BRL' }, // Brazilian Real
+    { value: 'rub', label: 'RUB' }, // Russian Ruble
+    { value: 'krw', label: 'KRW' }, // South Korean Won
+    { value: 'mxn', label: 'MXN' }, // Mexican Peso
+    { value: 'sek', label: 'SEK' }, // Swedish Krona
+    { value: 'nok', label: 'NOK' }, // Norwegian Krone
+    { value: 'dkk', label: 'DKK' }, // Danish Krone
+    { value: 'hkd', label: 'HKD' }, // Hong Kong Dollar
+    { value: 'myr', label: 'MYR' }, // Malaysian Ringgit
+    { value: 'thb', label: 'THB' }, // Thai Baht
+    { value: 'idr', label: 'IDR' }, // Indonesian Rupiah
+    { value: 'php', label: 'PHP' }, // Philippine Peso
+    { value: 'sar', label: 'SAR' }, // Saudi Riyal
+    { value: 'aed', label: 'AED' }, // United Arab Emirates Dirham
+    { value: 'vnd', label: 'VND' }, // Vietnamese Dong
+    { value: 'egp', label: 'EGP' }, // Egyptian Pound
+    { value: 'pln', label: 'PLN' }, // Polish Zloty
+    { value: 'try', label: 'TRY' }, // Turkish Lira
+];

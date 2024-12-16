@@ -677,6 +677,14 @@ video {
   visibility: hidden;
 }
 
+.basic-single {
+  flex: 0 0 auto;
+}
+
+.basic-single .select__control {
+  min-height: 51px;
+}
+
 [data-popper-arrow],
 [data-popper-arrow]:before {
   position: absolute;
