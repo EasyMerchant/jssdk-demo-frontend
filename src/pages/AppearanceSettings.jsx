@@ -11,20 +11,20 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                         { appearanceColorOptions.map((setting) => (
                             <div key={ setting.name } className="w-full flex  items-start flex-col gap-2">
                                 <label className="block text-sm font-medium text-gray-700"> { setting.label }</label>
-                                <div className='flex justify-between items-center gap-1 h-051 bg-[#F7F7F7] w-full px-2 rounded-md'>
+                                <div className='flex justify-between items-center gap-1 h-051 bg-transparent border border- w-full px-2 rounded-md'>
                                     <input
                                         type="color"
                                         name={ setting.name }
                                         value={ apperanceSettings[setting.name] }
                                         onChange={ handleAppearanceSettings }
-                                        className="!w-12 h-12 !border-0 !bg-transparent"
+                                        className="!w-8 h-8 !border-0 !bg-transparent rounded-lg"
                                     />
                                     <input
                                         type="text"
                                         name={ setting.name }
                                         value={ apperanceSettings[setting.name] }
                                         onChange={ handleAppearanceSettings }
-                                        className="inline-block w-full min-h-8 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-0"
+                                        className="inline-block w-full min-h-8 border border-gray-300 rounded-md focus:outline-none focus:ring-0 border-0 focus:border-0 bg-transparent"
                                     />
                                 </div>
                             </div>
@@ -94,24 +94,24 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                             { appearanceFontOptions.map((setting) => {
                                 return (
                                     <div key={ setting.name } className="w-full flex  items-start flex-col gap-2">
-                                        <label className="block text-sm font-medium text-gray-700"> { setting.label }</label>
-                                        <div className='flex justify-between items-center gap-1 h-051 bg-[#F7F7F7] w-full px-2 rounded-md'>
-                                            <input
-                                                type="color"
-                                                name={ setting.name }
-                                                value={ apperanceSettings[setting.name] }
-                                                onChange={ handleAppearanceSettings }
-                                                className="!w-12 h-12 !border-0 !bg-transparent"
-                                            />
-                                            <input
-                                                type="text"
-                                                name={ setting.name }
-                                                value={ apperanceSettings[setting.name] }
-                                                onChange={ handleAppearanceSettings }
-                                                className="inline-block w-full min-h-8 border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-0"
-                                            />
-                                        </div>
-                                    </div>
+                                <label className="block text-sm font-medium text-gray-700"> { setting.label }</label>
+                                <div className='flex justify-between items-center gap-1 h-051 bg-transparent border border- w-full px-2 rounded-md'>
+                                    <input
+                                        type="color"
+                                        name={ setting.name }
+                                        value={ apperanceSettings[setting.name] }
+                                        onChange={ handleAppearanceSettings }
+                                        className="!w-8 h-8 !border-0 !bg-transparent rounded-lg"
+                                    />
+                                    <input
+                                        type="text"
+                                        name={ setting.name }
+                                        value={ apperanceSettings[setting.name] }
+                                        onChange={ handleAppearanceSettings }
+                                        className="inline-block w-full min-h-8 border border-gray-300 rounded-md focus:outline-none focus:ring-0 border-0 focus:border-0 bg-transparent"
+                                    />
+                                </div>
+                            </div>
                                 )
                             }) }
                         </div>
