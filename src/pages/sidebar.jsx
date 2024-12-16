@@ -274,7 +274,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     id="drawer-navigation-label"
                     className="text-base pt-0 px-0 font-semibold text-black capitalize dark:text-white rounded-xl"
                 >
-                    Appearance Settings
+                    JS SDK DEMO
                 </h5>
                 <div className='flex gap-2'>
                    
@@ -332,7 +332,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     <ul className="font-medium flex flex-col gap-4">
                         {/* Theme Options List */ }
                         <li className="">
-                            <div className='flex'>
+                            <div className='flex gap-x-3'>
                                 <input
                                     id="appearance-settings-checkbox"
                                     type="checkbox"
@@ -347,7 +347,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 />
                                 <label
                                     htmlFor="appearance-settings-checkbox"
-                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
                                     Appearance Settings
                                 </label>
@@ -439,7 +439,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
-                            <div className='flex'>
+                            <div className='flex gap-x-3'>
                                 <input
                                     id="fields-checkbox"
                                     type="checkbox"
@@ -454,7 +454,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 />
                                 <label
                                     htmlFor="fields-checkbox"
-                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
                                     Fields
                                 </label>
@@ -505,7 +505,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </li>
                         {/* Payment Options List */ }
                         <li>
-                            <div className='flex'>
+                            <div className='flex gap-x-3'>
                                 <input
                                     id="payment-method-checkbox"
                                     type="checkbox"
@@ -520,7 +520,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 />
                                 <label
                                     htmlFor="payment-method-checkbox"
-                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
                                     Payment method
                                 </label>

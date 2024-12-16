@@ -41,7 +41,7 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                                     name="fontFamily"
                                     value={ apperanceSettings.fontFamily }
                                     onChange={ handleAppearanceSettings }
-                                    className="mt-2 h-051 bg-[#F7F7F7] border-0 block w-full px-3 py-2  rounded-md shadow-sm focus:outline-none focus:ring-0 focus:border-0 sm:text-sm"
+                                    className="mt-2 h-051 bg-transparent border border-gray-300 block w-full px-3 py-2 rounded-md"
                                 >
                                     { fontFamilyList.map((item, index) => (
                                         <option key={ index } value={ item.value }>{ item.name }</option>
@@ -56,7 +56,7 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                                         name="fontWeight"
                                         value={ apperanceSettings.fontWeight }
                                         onChange={ handleAppearanceSettings }
-                                        className="mt-2 h-051 bg-[#F7F7F7] border-0 block w-full px-3 py-2  rounded-md shadow-sm focus:outline-none focus:ring-0 focus:border-0 sm:text-sm"
+                                        className="mt-2 h-051 bg-transparent border border-gray-300 block w-full px-3 py-2 rounded-md"
                                     >
                                         <option value={ 100 } >Thin</option>
                                         <option value={ 200 }>Extra Light</option>
@@ -75,7 +75,7 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                                         name="fontSize"
                                         value={ apperanceSettings.fontSize }
                                         onChange={ handleAppearanceSettings }
-                                        className="mt-1 min-w-24 h-051 bg-[#F7F7F7] border-0 block w-full px-3 py-2  rounded-md shadow-sm focus:outline-none focus:ring-0 focus:border-0 sm:text-sm"
+                                        className="mt-2 min-w-24 h-051 bg-transparent border border-gray-300 block w-full px-3 py-2 rounded-md"
                                     >
                                         <option value={ 10 } >10px</option>
                                         <option value={ 11 }>12px</option>
@@ -95,7 +95,7 @@ const AppearanceSettings = ({ appearance, handleAppearanceToggle, apperanceSetti
                                 return (
                                     <div key={ setting.name } className="w-full flex  items-start flex-col gap-2">
                                 <label className="block text-sm font-medium text-gray-700"> { setting.label }</label>
-                                <div className='flex justify-between items-center gap-1 h-051 bg-transparent border border- w-full px-2 rounded-md'>
+                                <div className='flex justify-between items-center gap-1 h-051 bg-transparent border w-full px-2 rounded-md'>
                                     <input
                                         type="color"
                                         name={ setting.name }
