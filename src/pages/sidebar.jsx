@@ -408,7 +408,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     htmlFor="additional-fields-options-checkbox"
                                     className="w-full ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
-                                    Configure amount
+                                    Configure Amount
                                 </label>
                             </div>
                             <ul
@@ -522,7 +522,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     htmlFor="payment-method-checkbox"
                                     className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                                 >
-                                    Payment method
+                                    Payment Method
                                 </label>
                             </div>
                             <ul
