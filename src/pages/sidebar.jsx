@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import FieldsOptions from './FieldsOptions';
 import AppearanceSettings from './AppearanceSettings';
+import { Tooltip } from '../utils/commonUtils';
+import ReactSelectDropdown from '../components/ReactSelectDropdown';
+import { countryCurrency } from '../utils/common';
 
 const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
     const [appearance, setAppearance] = useState(false);
     const [optionsToggle, setOptionsToggle] = useState({
         additionalFieldsOptions: true,
-        appearanceSettings:true,
         paymentOptions: true,
-        fieldsOptions: false
+        fieldsOptions: false,
+        appearanceSettings: true
     });
     const {
         paymentMethods,
@@ -27,17 +30,49 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         submitButtonText,
     } = customizeOptions;
     const payMethod = ['card', "bank", "crypto", "wallet"];
-
     // Function to handle form options checkbox change
-    const handleCheckboxChange = (method) => {
-        setCustomizeOptions((prevOptions) => {
+    const handleCheckboxChange = async (method) => {
+        await setCustomizeOptions((prevOptions) => {
             const updatedMethods = prevOptions.paymentMethods.includes(method)
                 ? prevOptions.paymentMethods.filter((item) => item !== method)
                 : [...prevOptions.paymentMethods, method];
 
             return { ...prevOptions, paymentMethods: updatedMethods };
         });
+        if (method === "card") {
+            if (paymentMethods.includes(method)) {
+                setCustomizeOptions((prevData) => ({
+                    ...prevData,
+                    saveCard: false,
+                    // scanCard: false,
+                }));
+            } else {
+                setCustomizeOptions((prevData) => ({
+                    ...prevData,
+                    saveCard: true,
+                    // scanCard: true,
+                }));
+            }
+        }
+        if (method === "ach") {
+            if (paymentMethods.includes(method)) {
+                setCustomizeOptions((prevData) => ({
+                    ...prevData,
+                    saveAccount: false,
+                }));
+            } else {
+                setCustomizeOptions((prevData) => ({
+                    ...prevData,
+                    saveAccount: true,
+                }));
+            }
+        }
+        setCustomizeOptions((prevData) => ({
+            ...prevData,
+            ...(!prevData.paymentMethods.includes("card") && !prevData.paymentMethods.includes("ach") && { tokenOnly: false })
+        }));
     };
+
     const handleTogglePaymentMEthods = (event) => {
         const { checked } = event.target
         setCustomizeOptions((pervData) => ({
@@ -52,7 +87,9 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             [name]: value
         }))
     }
+
     const handleInputBlur = (value) => {
+        if (value < 0.5) value = "0.50"
         setCustomizeOptions((prevData) => ({
             ...prevData,
             amount: value
@@ -81,24 +118,53 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         }
     };
 
+    const toggleAppearance = (checked) => {
+        if (checked) {
+            setCustomizeOptions((prevOptions) => ({
+                ...prevOptions,
+                apperanceSettings: {
+                    bodyBackgroundColor: "#eeeff2",
+                    containerBackgroundColor: "#ffffff",
+                    primaryFontColor: "#000000",
+                    secondaryFontColor: "#666666",
+                    primaryButtonBackgroundColor: "#1757d9",
+                    primaryButtonHoverColor: "#3a70df",
+                    primaryButtonFontColor: "#ffffff",
+                    secondaryButtonBackgroundColor: "#ffffff",
+                    secondaryButtonHoverColor: "#1757d9",
+                    secondaryButtonFontColor: "#1757d9",
+                    theme: "light",
+                    fontSize: "16",
+                    fontWeight: 500,
+                    fontFamily: `"Montserrat", sans-serif`,
+                    borderRadius: "8",
+                }
+            }));
+        } else {
+            setCustomizeOptions(({ apperanceSettings, ...prevOptions }) => {
+                return { ...prevOptions }
+            });
+        }
+    }
+
     const handleFieldsRender = (event) => {
         const { name, checked } = event.target
-        if (name === "billing") {
+        if (name === "billing" || name === "fields") {
             setCustomizeOptions((prevOptions) => ({
                 ...prevOptions,
                 "fields": {
                     ...prevOptions.fields,
                     billing: checked ? [
-                        { name: 'address', required: false, value: 'Test ACH Address' },
+                        { name: 'address', required: true, value: 'Test ACH Address' },
                         { name: 'country', required: true, value: 'Country' },
-                        { name: 'state', required: false, value: '' },
-                        { name: 'city', required: false, value: '' },
+                        { name: 'state', required: true, value: '' },
+                        { name: 'city', required: true, value: '' },
                         { name: 'postal_code', required: true, value: '' },
                     ] : []
                 },
             }))
         }
-        if (name === "additional") {
+        if (name === "additional" || name === "fields") {
             setCustomizeOptions((prevOptions) => ({
                 ...prevOptions,
                 "fields": {
@@ -188,12 +254,13 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         }));
     };
 
-    const handleSidebarToggle = (id) => document.getElementById(id).classList.toggle("hidden");
+    const handleSidebarToggle = (id) => document.getElementById(id)?.classList.toggle("hidden");
     const logCustomizeOptions = () => {
         handleRenderUpdate();
     };
 
     const handleAppearanceToggle = (value) => setAppearance(value);
+
 
     return (
         <div
@@ -207,7 +274,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     id="drawer-navigation-label"
                     className="text-base pt-0 px-0 font-semibold text-black capitalize dark:text-white rounded-xl"
                 >
-                    JS SDK Demo
+                    Appearance Settings
                 </h5>
                 <div className='flex gap-2'>
                     <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
@@ -262,15 +329,17 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             <div className="relative pt-10 px-6">
                 <div>
                     <ul className="font-medium flex flex-col gap-4">
+                        {/* Theme Options List */ }
                         <li className="">
                             <div className='flex my-3 '>
                                 <input
                                     id="appearance-settings-checkbox"
                                     type="checkbox"
                                     checked={ optionsToggle.appearanceSettings }
-                                    onChange={ () => {
-                                        handleSidebarToggle("appearance-settings-fields")
-                                        setOptionsToggle((pervVal) => ({ ...pervVal, appearanceSettings: !pervVal.appearanceSettings }))
+                                    onChange={ (event) => {
+                                        handleSidebarToggle("appearance-settings-fields");
+                                        toggleAppearance(event.target.checked);
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, appearanceSettings: !pervVal.appearanceSettings }));
                                     }
                                     }
                                     className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
@@ -282,22 +351,12 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     Appearance Settings
                                 </label>
                             </div>
-                            
-                            <div  id="appearance-settings-fields" className='w-full'>
+
+                            <div id="appearance-settings-fields" className='w-full'>
                                 <div className='flex gap-4 w-full h-20'>
-                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
-                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings?.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
+                                    <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings?.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
                                 </div>
-                                {/* </li> */ }
-                                {/* Font Options */ }
-                                {/* <li className="mt-8">
-                                <a
-                                    id="appearance-options-fields"
-                                    href="#"
-                                    className="flex flex-col justify-between pt-0 py-0 pb-2 text-gray-900 rounded-lg dark:text-white  dark:hover:bg-gray-700 group"
-                                >
-                                    <span className=" text-sm ">Appearance</span>
-                                </a> */}
                                 <div className='mt-4 flex gap-4 w-full h-20'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -308,7 +367,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                         </span>
                                     </button>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("font") }>
-                                        <span className=' text-sm text-xl h-5'>H1</span>
+                                        <span className=' text-xl h-5'>H1</span>
                                         <span>Font</span>
                                     </button>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("border") }>
@@ -322,8 +381,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </div>
                             </div>
                         </li>
-                        {/* Additional Options List */ }
-                        <li className="">
+                        {/* Configure amount */ }
+                        <li className="mt-8">
                             <div className='flex mt-4'>
                                 <input
                                     id="additional-fields-options-checkbox"
@@ -331,6 +390,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     checked={ optionsToggle.additionalFieldsOptions }
                                     onChange={ () => {
                                         handleSidebarToggle("additional-fields-options");
+                                        handleSidebarToggle("additional-fields-options-alert");
                                         setOptionsToggle((pervVal) => ({ ...pervVal, additionalFieldsOptions: !pervVal.additionalFieldsOptions }))
                                     }
                                     }
@@ -350,23 +410,9 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 <li className="w-full ">
                                     <span className=' text-sm pt-0 py-0 mb-2 block'>Amount</span>
                                     <div className="h-051 flex gap-4 flex-row items-center justify-center">
-                                        <select
-                                            name="currency"
-                                            value={ currency }
-                                            onChange={ handleInputChange }
-                                            className="appearance-none min-w-[50px] h-full text-center block w-auto py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            style={ {
-                                                background: 'none',
-                                                WebkitAppearance: 'none',
-                                                MozAppearance: 'none',
-                                                padding: '8px 16px'
-                                            } }
-                                        >
-                                            <option value="usd">US</option>
-                                            <option value="ind">IND</option>
-                                        </select>
+                                        <ReactSelectDropdown defaultValue={ currency } options={ countryCurrency } setCustomizeOptions={ setCustomizeOptions } />
                                         <input
-                                            id="billing-fields-checkbox"
+                                            id="amount-fields-input"
                                             type="text"
                                             name="amount"
                                             value={ amount }
@@ -377,8 +423,11 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                         />
                                     </div>
                                 </li>
-
                             </ul>
+                            { !optionsToggle.additionalFieldsOptions && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                                <p className="font-bold">Note:</p>
+                                <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
+                            </div> }
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
@@ -386,12 +435,13 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 <input
                                     id="fields-checkbox"
                                     type="checkbox"
+                                    name='fields'
                                     checked={ optionsToggle.fieldsOptions }
-                                    onChange={ () => {
-                                        handleSidebarToggle("fields-options-checkbox")
+                                    onChange={ (event) => {
+                                        handleSidebarToggle("fields-options-checkbox");
+                                        handleFieldsRender(event);
                                         setOptionsToggle((pervVal) => ({ ...pervVal, fieldsOptions: !pervVal.fieldsOptions }))
-                                    }
-                                    }
+                                    } }
                                     className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
                                 />
                                 <label
@@ -445,169 +495,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </li>
                             </ul>
                         </li>
-                        {/* Card Options List */ }
-                        <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="token-only-checkbox"
-                                    type="checkbox"
-                                    name='tokenOnly'
-                                    checked={ tokenOnly }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="token-only-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Token Only
-                                </label>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={ 20 }
-                                    height={ 20 }
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z"
-                                        stroke="#2E333E"
-                                        strokeWidth={ 2 }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M7.5 7.66915C7.70163 7.11262 8.09962 6.64334 8.62346 6.34442C9.1473 6.0455 9.7632 5.93623 10.3621 6.03596C10.9609 6.1357 11.5041 6.43801 11.8954 6.88934C12.2867 7.34067 12.5009 7.91191 12.5 8.50186C12.5 10.1673 9.9271 11 9.9271 11"
-                                        stroke="#2E333E"
-                                        strokeWidth={ 2 }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M9.85156 14.2422H9.86156"
-                                        stroke="#2E333E"
-                                        strokeWidth={ 2 }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-
-                            </div>
-                        </li>
-                        <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="save-card-checkbox"
-                                    type="checkbox"
-                                    name='saveCard'
-                                    checked={ saveCard }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="save-card-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Save Card
-                                </label>
-                            </div>
-                        </li>
-                        {/* <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="scan-card-checkbox"
-                                    type="checkbox"
-                                    name='scanCard'
-                                    checked={ scanCard }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="scan-card-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Scan Card
-                                </label>
-                            </div>
-                        </li> */}
-                        {/* Other Options List */ }
-                        <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="save-account-checkbox"
-                                    type="checkbox"
-                                    name='saveAccount'
-                                    checked={ saveAccount }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="save-account-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Save Account
-                                </label>
-                            </div>
-                        </li>
-                        { !tokenOnly && <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="show-receipt-checkbox"
-                                    type="checkbox"
-                                    name='showReceipt'
-                                    checked={ showReceipt }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="show-receipt-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Show Receipt
-                                </label>
-                            </div>
-                        </li> }
-                        <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="show-total-checkbox"
-                                    type="checkbox"
-                                    name='showTotal'
-                                    checked={ showTotal }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="show-total-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Show Total
-                                </label>
-                            </div>
-                        </li>
-                        <li className="w-full">
-                            <div className="flex items-center gap-x-3">
-                                <input
-                                    id="show-submit-button-checkbox"
-                                    type="checkbox"
-                                    name='showSubmitButton'
-                                    checked={ showSubmitButton }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                    htmlFor="show-submit-button-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Show Submit Button
-                                </label>
-                            </div>
-                        </li>
-                        {/* Submit Button Text */ }
-                        { showSubmitButton && <li className="pl-8">
-                            <label htmlFor="submit_btn_text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Submit Button Text</label>
-                            <input type="text" id="submit_btn_text" name="submitButtonText" className="bg-gray-50 px-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter a value" value={ submitButtonText } onChange={ handleInputChange } />
-                        </li> }
                         {/* Payment Options List */ }
                         <li>
                             <div className='flex my-3 '>
@@ -652,10 +539,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 />
                                                 <label
                                                     htmlFor={ `${method}-checkbox` }
-                                                    className="flex gap-7 w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                                    className={ `${method === "wallet" ? "cursor-not-allowed text-gray-500" : "cursor-pointer text-gray-900"} flex gap-7 w-full text-sm font-medium dark:text-gray-300 select-none` }
                                                 >
                                                     { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
-                                                    { method === "wallet" && <span className='text-left text-slate-500'>coming soon</span> }
+                                                    { method === "wallet" && <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">coming soon</span> }
                                                 </label>
                                             </div>
                                         </li>
@@ -663,6 +550,186 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 }) }
                             </ul>
                         </li>
+                        {/* Token Only */ }
+                        <li className="w-full">
+                            <div className="relative flex items-center gap-x-3">
+                                <input
+                                    id="token-only-checkbox"
+                                    type="checkbox"
+                                    name='tokenOnly'
+                                    checked={ tokenOnly }
+                                    disabled={ !paymentMethods.includes("card") && !paymentMethods.includes("ach") }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${!paymentMethods.includes("card") && !paymentMethods.includes("ach") ? "!cursor-not-allowed" : "!cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="token-only-checkbox"
+                                    className={ `${!paymentMethods.includes("card") && !paymentMethods.includes("ach") ? "!cursor-not-allowed  text-gray-500" : "!cursor-pointer  text-gray-900"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                >
+                                    Token Only
+                                </label>
+                                <Tooltip text={ "When enabled we do not process payment but only tokenise the card/account." } ><svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={ 20 }
+                                    height={ 20 }
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M7.5 7.66915C7.70163 7.11262 8.09962 6.64334 8.62346 6.34442C9.1473 6.0455 9.7632 5.93623 10.3621 6.03596C10.9609 6.1357 11.5041 6.43801 11.8954 6.88934C12.2867 7.34067 12.5009 7.91191 12.5 8.50186C12.5 10.1673 9.9271 11 9.9271 11"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M9.85156 14.2422H9.86156"
+                                        stroke="#2E333E"
+                                        strokeWidth={ 2 }
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                                </Tooltip>
+                            </div>
+                        </li>
+                        {/* Save Card */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="save-card-checkbox"
+                                    type="checkbox"
+                                    name='saveCard'
+                                    checked={ saveCard }
+                                    disabled={ !paymentMethods.includes("card") }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${!paymentMethods.includes("card") ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="save-card-checkbox"
+                                    className={ `${!paymentMethods.includes("card") ? "cursor-not-allowed  text-gray-500" : "cursor-pointer  text-gray-900"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                >
+                                    Save Card
+                                </label>
+                            </div>
+                        </li>
+                        {/* Scan Card */ }
+                        {/* This is disabled for now.  */ }
+                        {/* <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="scan-card-checkbox"
+                                    type="checkbox"
+                                    name='scanCard'
+                                    checked={ scanCard }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="scan-card-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Scan Card
+                                </label>
+                            </div>
+                        </li> */}
+                        {/* Save Account */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="save-account-checkbox"
+                                    type="checkbox"
+                                    name='saveAccount'
+                                    checked={ saveAccount }
+                                    disabled={ !paymentMethods.includes("ach") }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${!paymentMethods.includes("ach") ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="save-account-checkbox"
+                                    className={ `${!paymentMethods.includes("ach") ? "cursor-not-allowed  text-gray-500" : "cursor-pointer  text-gray-900"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                >
+                                    Save Account
+                                </label>
+                            </div>
+                        </li>
+                        {/* Show Receipt */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-receipt-checkbox"
+                                    type="checkbox"
+                                    name='showReceipt'
+                                    checked={ showReceipt }
+                                    disabled={ tokenOnly }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${tokenOnly ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="show-receipt-checkbox"
+                                    className={ `${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                >
+                                    Show Receipt
+                                </label>
+                            </div>
+                        </li>
+                        {/* Show Total */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-total-checkbox"
+                                    type="checkbox"
+                                    name='showTotal'
+                                    checked={ showTotal }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="show-total-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Show Total
+                                </label>
+                            </div>
+                        </li>
+                        {/* Show Submit Button */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-submit-button-checkbox"
+                                    type="checkbox"
+                                    name='showSubmitButton'
+                                    checked={ showSubmitButton }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                />
+                                <label
+                                    htmlFor="show-submit-button-checkbox"
+                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                >
+                                    Show Submit Button
+                                </label>
+                            </div>
+                        </li>
+                        {/* Submit Button Text */ }
+                        { showSubmitButton ? <li className="pl-8">
+                            <label htmlFor="submit_btn_text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Submit Button Text</label>
+                            <input type="text" id="submit_btn_text" name="submitButtonText" className="bg-gray-50 px-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter a value" value={ submitButtonText } onChange={ handleInputChange } />
+                        </li> :
+                            <li>
+                                <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                                    <p className="font-bold">Note:</p>
+                                    <p>Form submission needs to be handled by developer.</p>
+                                </div>
+                            </li>
+                        }
                     </ul>
                 </div>
                 { appearance && <AppearanceSettings appearance={ appearance } handleAppearanceToggle={ handleAppearanceToggle } apperanceSettings={ apperanceSettings } handleAppearanceSettings={ handleAppearanceSettings } /> }

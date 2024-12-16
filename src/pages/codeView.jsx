@@ -47,7 +47,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                                     <div className="bg-gray-800 p-4 rounded-lg">
                                         <pre className="text-green-400">
                                             <span>{ `{` } <br /></span>
-                                            <span className='text-[#f8c555]'>"amount"</span><span>: "109.00" // optional</span> <br />
+                                            <span className='text-[#f8c555]'>"amount"</span><span>: "{customizeOptions.amount}" // optional</span> <br />
                                             <span>{ `}` }</span>
                                         </pre>
                                     </div>
