@@ -77,7 +77,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         const { checked } = event.target
         setCustomizeOptions((pervData) => ({
             ...pervData,
-            paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : []
+            paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : [],
+            ...(!checked ? { saveCard: false, scanCard: false, saveAccount: false, tokenOnly: false } : { saveCard: true, scanCard: true, saveAccount: true, tokenOnly: false })
         }))
     }
     const handleInputChange = (event) => {
@@ -277,7 +278,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     JS SDK DEMO
                 </h5>
                 <div className='flex gap-2'>
-                   
+
                     <button onClick={ () => toggleShowObject() } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
                         <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
@@ -353,17 +354,17 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 </label>
                             </div>
 
-                            <div id="appearance-settings-fields" className='w-full'>                           
+                            <div id="appearance-settings-fields" className='w-full'>
                                 <div className='flex gap-4 w-full h-20 mt-3'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings?.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings?.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
                                 </div>
                                 <div className='mt-6'>
-                                <label
-                                    className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                >
-                                    Appearance
-                                </label>
+                                    <label
+                                        className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    >
+                                        Appearance
+                                    </label>
                                 </div>
                                 <div className='my-4 flex gap-4 w-full h-20'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
@@ -432,10 +433,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     </div>
                                 </li>
                             </ul>
-                           {!optionsToggle.additionalFieldsOptions&& <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mt-3" role="alert">
-                                    <p className="font-bold">Note:</p>
-                                    <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
-                                </div>}
+                            { !optionsToggle.additionalFieldsOptions && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mt-3" role="alert">
+                                <p className="font-bold">Note:</p>
+                                <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
+                            </div> }
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
@@ -547,7 +548,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 />
                                                 <label
                                                     htmlFor={ `${method}-checkbox` }
-                                                    className="flex gap-7 w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                                    className={ `${method === "wallet" ? "text-gray-500" : "text-gray-900"} flex gap-7 w-full text-sm font-medium dark:text-gray-300 select-none` }
                                                 >
                                                     { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
                                                     { method === "wallet" && <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">coming soon</span> }
@@ -566,16 +567,17 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     type="checkbox"
                                     name='tokenOnly'
                                     checked={ tokenOnly }
+                                    disabled={ !paymentMethods.includes("card") && !paymentMethods.includes("ach") }
                                     onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                    className={ `${(!paymentMethods.includes("card") && !paymentMethods.includes("ach")) ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
                                 />
                                 <label
                                     htmlFor="token-only-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    className={ `${(!paymentMethods.includes("card") && !paymentMethods.includes("ach")) ? "cursor-not-allowed  text-gray-500" : "cursor-pointer  text-gray-900"} w-full text-sm font-medium  dark:text-gray-300 select-none` }
                                 >
                                     Token Only
                                 </label>
-                                <Tooltip text={"When enabled we do not process payment but only tokenise the card/account."} ><svg
+                                <Tooltip text={ "When enabled we do not process payment but only tokenise the card/account." } ><svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width={ 20 }
                                     height={ 20 }

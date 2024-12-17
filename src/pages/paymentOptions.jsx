@@ -8,10 +8,10 @@ const PaymentOptions = () => {
   const [loading, setLoading] = useState(false);
   const [showObject, setShowObject] = useState(false);
   const paymentsRef = useRef(null);
-  const [customizeOptions, setCustomizeOptions] = useState({
+  const [customizeOptions, setCustomizeOptions] = useState((localStorage.getItem("customizeOptions") && JSON.parse(localStorage.getItem("customizeOptions"))) || {
     container: 'payments',
     environment: "stage",
-    amount: 10.50,
+    amount: "10.50",
     tokenOnly: false,
     currency: "usd",
     saveCard: true,
@@ -24,18 +24,10 @@ const PaymentOptions = () => {
     paymentMethods: ['card', "ach", "crypto"],
     fields: {
       billing: [
-        { name: 'address', required: true, value: 'Test ACH Address' },
-        { name: 'country', required: true, value: 'Country' },
-        { name: 'state', required: true, value: '' },
-        { name: 'city', required: false, value: '' },
-        { name: 'postal_code', required: true, value: '' },
+       
       ],
       additional: [
-        { name: 'name', required: true, value: '' },
-        { name: 'email_address', required: true, value: '' },
-        { name: 'phone_number', required: true, value: '' },
-        { name: 'description', required: true, value: '' },
-        { name: 'donate', required: false }
+        
       ]
     },
     apperanceSettings: {
@@ -52,7 +44,7 @@ const PaymentOptions = () => {
       theme: "light",
       fontSize: "16",
       fontWeight: 500,
-      fontFamily:`"Montserrat", sans-serif`,
+      fontFamily: `"Inter", sans-serif`,
       borderRadius: "8",
     }
   });
@@ -73,11 +65,12 @@ const PaymentOptions = () => {
       elements.create({
         ...customizeOptions,
         amount,
-        environment: json.env
+        // environment: json.env
       });
 
       // On Ready Event -  it will trigger once all elements render successfully
       elements.on('ready', (event) => {
+        localStorage.setItem("customizeOptions", JSON.stringify(customizeOptions));
         setLoading(false);
         console.log("Ready", event)
       });
@@ -100,6 +93,7 @@ const PaymentOptions = () => {
     }
     catch (err) {
       console.log("Javascript Errror", err)
+      localStorage.setItem("customizeOptions", JSON.stringify(customizeOptions));
       setLoading(false);
     }
   };
@@ -126,10 +120,10 @@ const PaymentOptions = () => {
             </div>
           </div>
         }
-        { showObject && <CodeView toggleShowObject={toggleShowObject} customizeOptions={ customizeOptions } /> }
-        <ResponsiveButton paymentsRef={paymentsRef} />
-        <div id="payments"  ref={paymentsRef} className='w-full transition-all'></div>
-        </div>
+        { showObject && <CodeView toggleShowObject={ toggleShowObject } customizeOptions={ customizeOptions } /> }
+        <ResponsiveButton paymentsRef={ paymentsRef } />
+        <div id="payments" ref={ paymentsRef } className='w-full transition-all'></div>
+      </div>
     </div>
   )
 }

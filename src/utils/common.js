@@ -46,6 +46,10 @@ export const appearanceFontOptions = [
 
 export const fontFamilyList = [
     {
+        name:"Inter",
+        value:`"Inter", sans-serif`,
+    },
+    {
         name:"Roboto",
         value:`"Roboto", sans-serif`,
     },
