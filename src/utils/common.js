@@ -34,62 +34,62 @@ export const appearanceColorOptions = [
 ];
 
 export const appearanceFontOptions = [
-{
-    label: 'Primary Font Color',
-    name: 'primaryFontColor',
-},
-{
-    label: 'Secondary Font Color',
-    name: 'secondaryFontColor',
-},]
+    {
+        label: 'Primary Font Color',
+        name: 'primaryFontColor',
+    },
+    {
+        label: 'Secondary Font Color',
+        name: 'secondaryFontColor',
+    },]
 
 
 export const fontFamilyList = [
     {
-        name:"Inter",
-        value:`"Inter", sans-serif`,
+        name: "Inter",
+        value: `"Inter", sans-serif`,
     },
     {
-        name:"Roboto",
-        value:`"Roboto", sans-serif`,
+        name: "Roboto",
+        value: `"Roboto", sans-serif`,
     },
     {
-        name:"Open Sans",
-        value:`"Open Sans", sans-serif`,
+        name: "Open Sans",
+        value: `"Open Sans", sans-serif`,
     },
     {
-        name:"Lato",
-        value:`"Lato", sans-serif`,
+        name: "Lato",
+        value: `"Lato", sans-serif`,
     },
     {
-        name:"Montserrat",
-        value:`"Montserrat", sans-serif`,
+        name: "Montserrat",
+        value: `"Montserrat", sans-serif`,
     },
     {
-        name:"Oswald",
-        value:`"Oswald", sans-serif`,
+        name: "Oswald",
+        value: `"Oswald", sans-serif`,
     },
     {
-        name:"Source Sans 3",
-        value:`"Source Sans 3", sans-serif`,
+        name: "Source Sans 3",
+        value: `"Source Sans 3", sans-serif`,
     },
     {
-        name:"PT Sans",
-        value:`"PT Sans", sans-serif`,
+        name: "PT Sans",
+        value: `"PT Sans", sans-serif`,
     },
     {
-        name:"Merriweather",
-        value:`"Merriweather", sans-serif`,
+        name: "Merriweather",
+        value: `"Merriweather", sans-serif`,
     },
     {
-        name:"Nunito Sans",
-        value:`"Nunito Sans", sans-serif`,
+        name: "Nunito Sans",
+        value: `"Nunito Sans", sans-serif`,
     },
     {
-        name:"Roboto Mono",
-        value:`"Roboto Mono", monospace`,
+        name: "Roboto Mono",
+        value: `"Roboto Mono", monospace`,
     },
-] 
+]
 
 
 
@@ -125,3 +125,44 @@ export const countryCurrency = [
     { value: 'pln', label: 'PLN' }, // Polish Zloty
     { value: 'try', label: 'TRY' }, // Turkish Lira
 ];
+
+export const defaultOptions = {
+    container: 'payments',
+    environment: "sandbox",
+    amount: "10.50",
+    tokenOnly: false,
+    currency: "usd",
+    saveCard: true,
+    // scanCard: false,
+    saveAccount: true,
+    submitButtonText: "Submit",
+    showReceipt: true,
+    showTotal: true,
+    showSubmitButton: true,
+    paymentMethods: ['card', "ach", "crypto"],
+    fields: {
+        billing: [
+
+        ],
+        additional: [
+
+        ]
+    },
+    apperanceSettings: {
+        bodyBackgroundColor: "#eeeff2",
+        containerBackgroundColor: "#ffffff",
+        primaryFontColor: "#000000",
+        secondaryFontColor: "#666666",
+        primaryButtonBackgroundColor: "#1757d9",
+        primaryButtonHoverColor: "#3a70df",
+        primaryButtonFontColor: "#ffffff",
+        secondaryButtonBackgroundColor: "#ffffff",
+        secondaryButtonHoverColor: "#1757d9",
+        secondaryButtonFontColor: "#1757d9",
+        theme: "light",
+        fontSize: "16",
+        fontWeight: 500,
+        fontFamily: `"Inter", sans-serif`,
+        borderRadius: "8",
+    }
+}

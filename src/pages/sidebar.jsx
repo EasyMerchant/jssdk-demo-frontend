@@ -3,7 +3,7 @@ import FieldsOptions from './FieldsOptions';
 import AppearanceSettings from './AppearanceSettings';
 import { Tooltip } from '../utils/commonUtils';
 import ReactSelectDropdown from '../components/ReactSelectDropdown';
-import { countryCurrency } from '../utils/common';
+import { countryCurrency, defaultOptions } from '../utils/common';
 
 const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
@@ -78,7 +78,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         setCustomizeOptions((pervData) => ({
             ...pervData,
             paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : [],
-            ...(!checked ? { saveCard: false, scanCard: false, saveAccount: false, tokenOnly: false } : { saveCard: true, scanCard: true, saveAccount: true, tokenOnly: false })
+            ...(!checked ? { saveCard: false, saveAccount: false, tokenOnly: false } : { saveCard: true, saveAccount: true, tokenOnly: false })
         }))
     }
     const handleInputChange = (event) => {
@@ -260,6 +260,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         handleRenderUpdate();
     };
 
+    const handleResetSettings = (event)=>{
+        setCustomizeOptions(defaultOptions);
+        localStorage.setItem("customizeOptions",JSON.stringify(defaultOptions));
+    }
     const handleAppearanceToggle = (value) => setAppearance(value);
 
 
@@ -279,6 +283,29 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                 </h5>
                 <div className='flex gap-2'>
 
+                    <button onClick={ handleResetSettings } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
+                        <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
+                            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                <g clipPath="url(#clip0_1276_7761)">
+                                    <path
+                                        d="M19.7285 10.9288C20.4413 13.5978 19.7507 16.5635 17.6569 18.6573C15.1798 21.1344 11.4826 21.6475 8.5 20.1966M18.364 8.05071L17.6569 7.3436C14.5327 4.21941 9.46736 4.21941 6.34316 7.3436C3.42964 10.2571 3.23318 14.8588 5.75376 18M18.364 8.05071H14.1213M18.364 8.05071V3.80807"
+                                        stroke="currentColor"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_1276_7761">
+                                        <rect width={ 24 } height={ 24 } fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </g>
+                        </svg>
+
+                    </button>
                     <button onClick={ () => toggleShowObject() } className='inline-flex items-center justify-center bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>
                         <svg viewBox="0 0 24 24" className='w-6 h-6' fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
@@ -358,13 +385,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                 <div className='flex gap-4 w-full h-20 mt-3'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm  rounded-lg ${apperanceSettings?.theme === "light" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(false) }>Light</button>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg ${apperanceSettings?.theme === "dark" ? "border-2 border-solid border-blue-600 " : ""}` } onClick={ () => handleThemChange(true) }>Dark</button>
-                                </div>
-                                <div className='mt-6'>
-                                    <label
-                                        className="w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-                                    >
-                                        Appearance
-                                    </label>
                                 </div>
                                 <div className='my-4 flex gap-4 w-full h-20'>
                                     <button className={ `w-1/2 h-full bg-[#F7F7F7] text-sm rounded-lg flex flex-col items-center justify-center gap-3` } onClick={ () => handleAppearanceToggle("color") }>
@@ -631,24 +651,25 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </li>
                         {/* Scan Card */ }
                         {/* This is disabled for now.  */ }
-                        {/* <li className="w-full">
+                        <li className="w-full">
                             <div className="flex items-center gap-x-3">
                                 <input
                                     id="scan-card-checkbox"
                                     type="checkbox"
                                     name='scanCard'
-                                    checked={ scanCard }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className="checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
+                                    checked={ false }
+                                    disabled={ true }
+                                    // onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className="cursor-not-allowed checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
                                 />
                                 <label
                                     htmlFor="scan-card-checkbox"
-                                    className="w-full text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
+                                    className="flex gap-7 cursor-not-allowed w-full text-sm font-medium text-gray-500 dark:text-gray-300 select-none"
                                 >
-                                    Scan Card
+                                    Scan Card <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">coming soon</span>
                                 </label>
                             </div>
-                        </li> */}
+                        </li>
                         {/* Save Account */ }
                         <li className="w-full">
                             <div className="flex items-center gap-x-3">
