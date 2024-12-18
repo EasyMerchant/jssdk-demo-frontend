@@ -27,7 +27,7 @@ const PaymentOptions = () => {
       elements.create({
         ...customizeOptions,
         amount,
-        // environment: json.env
+        environment: json.env
       });
 
       // On Ready Event -  it will trigger once all elements render successfully
