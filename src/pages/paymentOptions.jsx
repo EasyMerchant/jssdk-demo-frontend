@@ -2,52 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from './sidebar';
 import CodeView from './codeView';
 import ResponsiveButton from './ResponsiveButton';
+import { defaultOptions } from '../utils/common';
 
 const PaymentOptions = () => {
   let elements;
   const [loading, setLoading] = useState(false);
   const [showObject, setShowObject] = useState(false);
   const paymentsRef = useRef(null);
-  const [customizeOptions, setCustomizeOptions] = useState((localStorage.getItem("customizeOptions") && JSON.parse(localStorage.getItem("customizeOptions"))) || {
-    container: 'payments',
-    environment: "stage",
-    amount: "10.50",
-    tokenOnly: false,
-    currency: "usd",
-    saveCard: true,
-    // scanCard: true,
-    saveAccount: true,
-    submitButtonText: "Submit",
-    showReceipt: true,
-    showTotal: true,
-    showSubmitButton: true,
-    paymentMethods: ['card', "ach", "crypto"],
-    fields: {
-      billing: [
-       
-      ],
-      additional: [
-        
-      ]
-    },
-    apperanceSettings: {
-      bodyBackgroundColor: "#eeeff2",
-      containerBackgroundColor: "#ffffff",
-      primaryFontColor: "#000000",
-      secondaryFontColor: "#666666",
-      primaryButtonBackgroundColor: "#1757d9",
-      primaryButtonHoverColor: "#3a70df",
-      primaryButtonFontColor: "#ffffff",
-      secondaryButtonBackgroundColor: "#ffffff",
-      secondaryButtonHoverColor: "#1757d9",
-      secondaryButtonFontColor: "#1757d9",
-      theme: "light",
-      fontSize: "16",
-      fontWeight: 500,
-      fontFamily: `"Inter", sans-serif`,
-      borderRadius: "8",
-    }
-  });
+  const [customizeOptions, setCustomizeOptions] = useState((localStorage.getItem("customizeOptions") && JSON.parse(localStorage.getItem("customizeOptions"))) || defaultOptions);
 
   async function initialize() {
     document.getElementById("payments").innerHTML = '';
