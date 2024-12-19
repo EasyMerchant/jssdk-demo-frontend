@@ -166,3 +166,10 @@ export const defaultOptions = {
         borderRadius: "8",
     }
 }
+
+export const defaultOptionsToggle ={
+    additionalFieldsOptions: true,
+    paymentOptions: true,
+    fieldsOptions: false,
+    appearanceSettings: true
+}

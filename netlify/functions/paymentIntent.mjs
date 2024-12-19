@@ -24,7 +24,6 @@ export default async (request, context) => {
       base_url = "https://sandbox-api.sandbox-lyfepay.io/api/v1";
     }
     const response = await fetch(base_url+"/paymentintent", defaultOptions);
-    console.log({response})
     const data = await response.json();
     return new Response(JSON.stringify({
       statusCode: 201,
