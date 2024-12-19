@@ -169,7 +169,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                                 <div className="space-y-2">
                                     <p className="my-3 inline-block max-w-4xl 2xl:max-w-5xl break-words w-full text-slate-300 prose prose-md leading-6">
                                         Include the following code to create an instance of JS SDK UI, replace the{ " " }
-                                        <b>{ "{" }undefined</b> placeholder with actual token generated from Step above.
+                                        <b>{ "{{client_token}}" }</b> placeholder with actual token generated from Step above.
                                     </p>
                                     <div className="bg-gray-800 p-4 rounded-lg">
                                         <pre className="language-js max-h-[350px] overflow-auto scrollbar scrollbar-w-[10px] scrollbar-h-[10px] dark:scrollbar-thumb-gray-600 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-900 scrollbar-track-gray-800">
