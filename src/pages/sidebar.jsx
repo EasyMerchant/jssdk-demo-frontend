@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FieldsOptions from './FieldsOptions';
 import AppearanceSettings from './AppearanceSettings';
 import { Tooltip } from '../utils/commonUtils';
 import ReactSelectDropdown from '../components/ReactSelectDropdown';
-import { countryCurrency, defaultOptions } from '../utils/common';
+import { countryCurrency, defaultOptions, defaultOptionsToggle } from '../utils/common';
 
-const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject }) => {
+const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject, optionsToggle, setOptionsToggle }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
     const [appearance, setAppearance] = useState(false);
-    const [optionsToggle, setOptionsToggle] = useState({
-        additionalFieldsOptions: true,
-        paymentOptions: true,
-        fieldsOptions: false,
-        appearanceSettings: true
-    });
     const {
         paymentMethods,
         saveCard,
@@ -256,15 +250,41 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     };
 
     const handleSidebarToggle = (id) => document.getElementById(id)?.classList.toggle("hidden");
-    const logCustomizeOptions = () => {
-        handleRenderUpdate();
-    };
 
-    const handleResetSettings = (event)=>{
+    const handleResetSettings = (event) => {
         setCustomizeOptions(defaultOptions);
-        localStorage.setItem("customizeOptions",JSON.stringify(defaultOptions));
+        setOptionsToggle(defaultOptionsToggle);
+        localStorage.setItem('customizeOptions', JSON.stringify(defaultOptions));
+        localStorage.setItem('optionsToggle', JSON.stringify(defaultOptionsToggle));
     }
     const handleAppearanceToggle = (value) => setAppearance(value);
+
+    useEffect(() => {
+        if (!optionsToggle.appearanceSettings) {
+            document.getElementById("appearance-settings-fields").classList.add("hidden")
+        } else {
+            document.getElementById("appearance-settings-fields").classList.remove("hidden")
+        }
+
+        if (!optionsToggle.additionalFieldsOptions) {
+            document.getElementById("additional-fields-options").classList.add("hidden")
+        } else {
+            document.getElementById("additional-fields-options").classList.remove("hidden")
+        }
+
+        if (!optionsToggle.paymentOptions) {
+            document.getElementById("payment-options").classList.add("hidden")
+        } else {
+            document.getElementById("payment-options").classList.remove("hidden")
+        }
+
+        if (!optionsToggle.fieldsOptions) {
+            document.getElementById("fields-options-checkbox").classList.add("hidden")
+        } else {
+            document.getElementById("fields-options-checkbox").classList.remove("hidden")
+        }
+        return () => { }
+    }, [optionsToggle])
 
 
     return (
@@ -334,7 +354,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         </svg>
 
                     </button>
-                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { event.preventDefault(); logCustomizeOptions(); } }>
+                    <button className='inline-flex items-center justify-center bg-primary-300 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded' onClick={ (event) => { handleRenderUpdate(); } }>
                         <svg viewBox="0 0 512 512" className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="#000000">
                             <g id="SVGRepo_bgCarrier" strokeWidth={ 0 } />
                             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
@@ -561,7 +581,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                     id={ `${method}-checkbox` }
                                                     type="checkbox"
                                                     checked={ method === "wallet" ? false : paymentMethods.includes(method) }
-                                                    onChange={ () => method === "wallet" ? console.log("coming soon") :
+                                                    onChange={ () => method === "wallet" ? alert("coming soon") :
                                                         handleCheckboxChange(method) }
                                                     disabled={ method === "wallet" }
                                                     className={ `${method === "wallet" ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
