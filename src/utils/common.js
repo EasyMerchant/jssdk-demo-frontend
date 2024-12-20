@@ -167,9 +167,27 @@ export const defaultOptions = {
     }
 }
 
-export const defaultOptionsToggle ={
+export const defaultOptionsToggle = {
     additionalFieldsOptions: true,
     paymentOptions: true,
     fieldsOptions: false,
     appearanceSettings: true
+}
+
+export const fieldOptionsLabel = {
+    billing: {
+        address: "Address",
+        country: "Country",
+        state: "State",
+        city: "City",
+        postal_code: "Postal Code",
+    },
+    additional: {
+        name: "Name",
+        email_address: "Email Address",
+        phone_number: "Phone Number",
+        description: "Description",
+        donate: "Donate",
+    }
+
 }
