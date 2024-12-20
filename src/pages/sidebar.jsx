@@ -169,7 +169,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         { name: 'email_address', required: true, value: '' },
                         { name: 'phone_number', required: true, value: '' },
                         { name: 'description', required: true, value: '' },
-                        { name: 'donate', required: false }
+                        { name: 'donate', required: true }
                     ] : []
                 },
             }))
@@ -588,7 +588,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                                 />
                                                 <label
                                                     htmlFor={ `${method}-checkbox` }
-                                                    className={ `${method === "wallet" ? "text-gray-500" : "text-gray-900"} flex gap-7 w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                                    className={ `${method === "wallet" ? "cursor-not-allowed text-gray-500" : "cursor-pointer text-gray-900"} flex gap-7 w-full text-sm font-medium dark:text-gray-300 select-none` }
                                                 >
                                                     { payMethod[index].charAt(0).toUpperCase() + payMethod[index].slice(1) }
                                                     { method === "wallet" && <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">coming soon</span> }

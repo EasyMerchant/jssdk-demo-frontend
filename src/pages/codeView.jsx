@@ -6,7 +6,7 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 const CodeView = ({ customizeOptions, toggleShowObject }) => {
     const [copied, setCopied] = useState(false);
     const [steps, setStep] = useState(1);
-
+    const lyfePayUrl = import.meta.env.VITE_CDN_LYFEPAY_URL || "https://cdn.lyfepay.io/js-sdk/v1/checkout-v1.0.81.min.js?v=9";
     const copyToClipboard = () => {
         const code = `<script type="text/javascript">
 var elements = new lyfPayCheckout("{{client_token}}");
@@ -36,7 +36,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                                 <div className="space-x-2">
                                     <span className="font-semibold">API URL</span>
                                     <div className='bg-gray-800 p-4 rounded-lg'>
-                                        <span className="bg-gray-800 text-green-400 rounded-lg py-1 px-3 text-sm">
+                                        <span className="bg-gray-800 text-green-400 rounded-lg py-1 px-3">
                                             <span className='text-[#f8c555]'>POST </span>&nbsp;<span className="token string">"https://api.lyfepay.io/api/v1/paymentintent"</span>
                                         </span>
                                     </div>
@@ -47,7 +47,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                                     <div className="bg-gray-800 p-4 rounded-lg">
                                         <pre className="text-green-400">
                                             <span>{ `{` } <br /></span>
-                                            <span className='text-[#f8c555]'>"amount"</span><span>: "{customizeOptions.amount}" // optional</span> <br />
+                                            <span className='text-[#f8c555]'>"amount"</span><span>: "{ customizeOptions.amount }" // optional</span> <br />
                                             <span>{ `}` }</span>
                                         </pre>
                                     </div>
@@ -137,7 +137,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                                                 <span className="text-[#67cdcc]">&lt;</span>script src
                                                 <span className="text-[#67cdcc]">=</span>
                                                 <span className="text-[#7ec699]">
-                                                    "https://cdn.lyfepay.io/js-sdk/v1/checkout-v1.0.75.min.js?v=9"
+                                                    "{ lyfePayUrl }"
                                                 </span>{ " " }
                                                 <span className="text-[#67cdcc]">&gt;</span>
                                                 <span className="text-[#67cdcc]">&lt;</span>
@@ -168,9 +168,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
 
                                 <div className="space-y-2">
                                     <p className="my-3 inline-block max-w-4xl 2xl:max-w-5xl break-words w-full text-slate-300 prose prose-md leading-6">
-                                        Include the following code to create an instance of JS SDK UI, replace the{ " " }
-                                        <b>{ "{{client_token}}" }</b> placeholder with actual token generated from Step above.
-                                    </p>
+                                        Include the following code to create an instance of JS SDK UI, replace the  <b>{ "{{client_token}}" }</b>  placeholder with actual token generated from Step one.</p>
                                     <div className="bg-gray-800 p-4 rounded-lg">
                                         <pre className="language-js max-h-[350px] overflow-auto scrollbar scrollbar-w-[10px] scrollbar-h-[10px] dark:scrollbar-thumb-gray-600 scrollbar-thumb-gray-500 dark:scrollbar-track-gray-900 scrollbar-track-gray-800">
                                             <code className='relative'>
@@ -269,7 +267,7 @@ elements.create(${JSON.stringify(customizeOptions, null, 2)})
                         </button>
                     </div>
                 </div>
-            ): (
+            ) : (
                 <div>
                     <h4>Oops!</h4>
                     <p>Something went wrong.</p>
