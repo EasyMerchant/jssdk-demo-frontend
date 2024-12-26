@@ -1,10 +1,12 @@
 import React from 'react'
+import { fieldOptionsLabel } from '../utils/common';
 
 const FieldsOptions = ({ data, handleFieldsOptions, type }) => {
+    const optionLabel =fieldOptionsLabel[type];
     return (
         <div className='py-2 pl-9'>
-            <strong className='mb-3 block -m-3 mt-3'>&#x2705; Check For Required<span className="text-[red] ml-1"> *</span></strong>
-            <ol className='list-disc flex flex-col list-none gap-2'>
+            <strong className='mb-3 -m-3 mt-3 flex gap-2'><img src="/public/check.svg" alt="check" width={20} height={20} /> Check For Required<span className="text-[red] ml-1"> *</span></strong>
+            <ol className='flex flex-col list-none gap-2'>
                 { data.map((item, index) => (
                     <li className='flex flex-row gap-1 items-center' key={ index }>
                         <input
@@ -20,7 +22,7 @@ const FieldsOptions = ({ data, handleFieldsOptions, type }) => {
                             htmlFor={ item.name }
                             className="w-full  text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
                         >
-                            { item.name }
+                            { optionLabel[item.name] }
                         </label>
                     </li>
                 )) }
