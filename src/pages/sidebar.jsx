@@ -437,6 +437,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     id="additional-fields-options-checkbox"
                                     type="checkbox"
                                     checked={ optionsToggle.additionalFieldsOptions }
+                                    disabled={ tokenOnly }
                                     onChange={ () => {
                                         handleSidebarToggle("additional-fields-options");
                                         handleSidebarToggle("additional-fields-options-alert");
@@ -473,10 +474,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     </div>
                                 </li>
                             </ul>
-                            { !optionsToggle.additionalFieldsOptions && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mt-3" role="alert">
+                            { !optionsToggle.additionalFieldsOptions && !tokenOnly && ( <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mt-3" role="alert">
                                 <p className="font-bold">Note:</p>
                                 <p>Amount must be provided at the time of creating payment intent by developer. For demo purpose we have used random amount in backend.</p>
-                            </div> }
+                            </div> )}
                         </li>
                         {/* Fields Options List */ }
                         <li className="">
