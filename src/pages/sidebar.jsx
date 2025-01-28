@@ -608,7 +608,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     name='tokenOnly'
                                     checked={ tokenOnly }
                                     disabled={ !paymentMethods.includes("card") && !paymentMethods.includes("ach") }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    onChange={ (event) => {
+                                        handleCardCheckboxChange(event)
+                                        setOptionsToggle((pervVal) => ({ ...pervVal, additionalFieldsOptions: !pervVal.additionalFieldsOptions }))
+                                    }}
                                     className={ `${(!paymentMethods.includes("card") && !paymentMethods.includes("ach")) ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
                                 />
                                 <label
