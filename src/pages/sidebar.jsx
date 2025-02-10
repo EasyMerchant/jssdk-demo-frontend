@@ -14,6 +14,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         // scanCard,
         saveAccount,
         showReceipt,
+        showDonate,
         showTotal,
         tokenOnly,
         currency,
@@ -45,6 +46,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                     ...prevData,
                     saveCard: true,
                     // scanCard: true,
+                    showDonate: true
                 }));
             }
         }
@@ -58,12 +60,14 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                 setCustomizeOptions((prevData) => ({
                     ...prevData,
                     saveAccount: true,
+                    showDonate: true
                 }));
             }
         }
         setCustomizeOptions((prevData) => ({
             ...prevData,
-            ...(!prevData.paymentMethods.includes("card") && !prevData.paymentMethods.includes("ach") && { tokenOnly: false })
+            ...(!prevData.paymentMethods.includes("card") && !prevData.paymentMethods.includes("ach") && { tokenOnly: false }),
+            ...(!prevData.paymentMethods.includes("card") && !prevData.paymentMethods.includes("ach") && { showDonate: false })
         }));
     };
 
@@ -72,7 +76,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         setCustomizeOptions((pervData) => ({
             ...pervData,
             paymentMethods: checked ? ['card', "ach", "crypto", "wallet"] : [],
-            ...(!checked ? { saveCard: false, saveAccount: false, tokenOnly: false } : { saveCard: true, saveAccount: true, tokenOnly: false })
+            ...(!checked ? { saveCard: false, saveAccount: false, tokenOnly: false } : { saveCard: true, saveAccount: true, tokenOnly: false, })
         }))
     }
     const handleInputChange = (event) => {
@@ -169,7 +173,6 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                         { name: 'email_address', required: true, value: '' },
                         { name: 'phone_number', required: true, value: '' },
                         { name: 'description', required: true, value: '' },
-                        { name: 'donate', required: true }
                     ] : []
                 },
             }))
@@ -731,6 +734,26 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     className={ `${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none` }
                                 >
                                     Show Receipt
+                                </label>
+                            </div>
+                        </li>
+                        {/* Show Donate */ }
+                        <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="show-donate-checkbox"
+                                    type="checkbox"
+                                    name='showDonate'
+                                    checked={ showDonate }
+                                    disabled={ !paymentMethods.includes("card") && !paymentMethods.includes("ach") }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${(!paymentMethods.includes("card") && !paymentMethods.includes("ach")) ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="show-donate-checkbox"
+                                    className={ `${(!paymentMethods.includes("card") && !paymentMethods.includes("ach")) ? "cursor-not-allowed  text-gray-500" : "cursor-pointer  text-gray-900"} w-full text-sm font-medium  dark:text-gray-300 select-none` }
+                                >
+                                    Show Donate
                                 </label>
                             </div>
                         </li>
