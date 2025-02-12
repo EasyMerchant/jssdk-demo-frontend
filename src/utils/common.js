@@ -137,6 +137,7 @@ export const defaultOptions = {
     saveAccount: true,
     submitButtonText: "Submit",
     showReceipt: true,
+    showDonate: true,
     showTotal: true,
     showSubmitButton: true,
     paymentMethods: ['card', "ach", "crypto"],
