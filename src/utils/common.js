@@ -139,6 +139,7 @@ export const defaultOptions = {
     showReceipt: true,
     showDonate: true,
     showTotal: true,
+    authenticatedACH: false,
     showSubmitButton: true,
     paymentMethods: ['card', "ach", "crypto"],
     fields: {
@@ -188,7 +189,6 @@ export const fieldOptionsLabel = {
         email_address: "Email Address",
         phone_number: "Phone Number",
         description: "Description",
-        donate: "Donate",
     }
 
 }

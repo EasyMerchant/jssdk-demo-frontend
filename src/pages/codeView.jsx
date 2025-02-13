@@ -6,7 +6,7 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 const CodeView = ({ customizeOptions, toggleShowObject }) => {
     const [copied, setCopied] = useState(false);
     const [steps, setStep] = useState(1);
-    const lyfePayUrl = import.meta.env.VITE_CDN_LYFEPAY_URL || "https://cdn.lyfepay.io/js-sdk/v1/checkout-v1.0.84.min.js?v=9";
+    const lyfePayUrl = import.meta.env.VITE_CDN_LYFEPAY_URL || "https://cdn.lyfepay.io/js-sdk/v1/checkout-v1.0.87.min.js?v=9";
     const copyToClipboard = () => {
         const code = `<script type="text/javascript">
 var elements = new lyfPayCheckout("{{client_token}}");
