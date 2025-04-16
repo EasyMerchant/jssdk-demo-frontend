@@ -6,7 +6,11 @@ function getRandomInt(min, max) {
 const defaultOptions = {
   method: "POST",
   body: JSON.stringify({
-    amount: getRandomInt(1,100)
+    amount: getRandomInt(1,100),
+    "is_recurring":true,
+     "intervals": ["weekly","monthly"],
+     "allowed_cycles": "2",
+     "recurring_start_date_type":"custom"
   }),
   headers: {
     'Content-Type': 'application/json',
