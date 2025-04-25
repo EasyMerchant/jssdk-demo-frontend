@@ -7,10 +7,7 @@ const defaultOptions = {
   method: "POST",
   body: JSON.stringify({
     amount: getRandomInt(1,100),
-    "is_recurring":true,
-     "intervals": ["weekly","monthly"],
-     "allowed_cycles": "2",
-     "recurring_start_date_type":"custom"
+   
   }),
   headers: {
     'Content-Type': 'application/json',
@@ -26,6 +23,18 @@ export default async (request, context) => {
       base_url = "https://api.lyfepay.io/api/v1";
     } else if (env == 'sandbox') {
       base_url = "https://sandbox-api.sandbox-lyfepay.io/api/v1";
+    }
+    const parsedBody = await request.json()
+    const {amount,is_recurring, intervals, allowed_cycles, recurring_start_date_type, recurring_start_date } = parsedBody;
+    if(is_recurring==true){
+    defaultOptions.body = JSON.stringify({
+      amount,
+      is_recurring,
+      intervals,
+      allowed_cycles,
+      recurring_start_date_type,
+      recurring_start_date
+    });
     }
     const response = await fetch(base_url+"/paymentintent", defaultOptions);
     const data = await response.json();

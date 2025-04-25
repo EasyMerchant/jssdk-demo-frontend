@@ -20,6 +20,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         tokenOnly,
         currency,
         amount,
+        enableRecurring,
         showSubmitButton,
         fields: { billing, additional },
         apperanceSettings,
@@ -103,7 +104,8 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
             setCustomizeOptions((prevOptions) => ({
                 ...prevOptions,
                 [name]: checked,
-                showReceipt: !checked
+                showReceipt: !checked,
+                enableRecurring: false,
             }));
         } else if (name === "showSubmitButton") {
             setCustomizeOptions((prevOptions) => ({
@@ -656,6 +658,26 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     />
                                 </svg>
                                 </Tooltip>
+                            </div>
+                        </li>
+                               {/* Enable Recurring */ }
+                               <li className="w-full">
+                            <div className="flex items-center gap-x-3">
+                                <input
+                                    id="enable-recurring-checkbox"
+                                    type="checkbox"
+                                    name='enableRecurring'
+                                    disabled={ tokenOnly }
+                                    checked={ enableRecurring }
+                                    onChange={ (event) => handleCardCheckboxChange(event) }
+                                    className={ `${tokenOnly ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                />
+                                <label
+                                    htmlFor="save-card-checkbox"
+                                    className={ `${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                >
+                                    Enable Recurring
+                                </label>
                             </div>
                         </li>
                         {/* Save Card */ }
