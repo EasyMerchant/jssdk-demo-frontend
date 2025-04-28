@@ -26,22 +26,30 @@ const PaymentOptions = () => {
       document.getElementById('payments').innerHTML = '';
       setLoading(true);
       let amount = customizeOptions.amount; // please replace the value with amount provided on demo page
+      let is_recurring = customizeOptions.enableRecurring;
+      let intervals = customizeOptions.intervals;
+      let allowed_cycles = customizeOptions.allowedCycles;  
+      let recurring_start_date_type = customizeOptions.recurringStartDateType;
+      let recurring_start_date = customizeOptions.recurringStartDate;
       const response = await fetch("/.netlify/functions/paymentIntent", {
         method: 'POST',
-        body: JSON.stringify({ amount }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount, is_recurring, intervals, allowed_cycles, recurring_start_date_type, recurring_start_date }),
       });
       const json = await response.json();
       let client_token = json.body.client_token;
-
-      if (!elements.current) {
-        elements.current = new lyfPayCheckout(client_token);
-      } else {
-        // Force clear the event map for "ready" as a fallback
-        elements.current.eventMap.set('ready', []);
-        elements.current.eventMap.set('done', []);
-        elements.current.eventMap.set('error', []);
-        elements.current.eventMap.set('processing', []);
-      }
+      elements.current = new lyfPayCheckout(client_token);
+      // if (!elements.current) {
+      //   elements.current = new lyfPayCheckout(client_token);
+      // } else {
+      //   // Force clear the event map for "ready" as a fallback
+      //   elements.current.eventMap.set('ready', []);
+      //   elements.current.eventMap.set('done', []);
+      //   elements.current.eventMap.set('error', []);
+      //   elements.current.eventMap.set('processing', []);
+      // }
 
       elements.current.create({
         ...customizeOptions,
