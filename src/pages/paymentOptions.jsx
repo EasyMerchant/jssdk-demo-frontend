@@ -30,7 +30,7 @@ const PaymentOptions = () => {
       let intervals = customizeOptions.intervals;
       let allowed_cycles = customizeOptions.allowedCycles;  
       let recurring_start_date_type = customizeOptions.recurringStartDateType;
-      let recurring_start_date = customizeOptions.recurringStartDate;
+      let recurring_start_date =  new Date(customizeOptions.recurringStartDate).toLocaleDateString('es-pa');
       const response = await fetch("/.netlify/functions/paymentIntent", {
         method: 'POST',
         headers: {
