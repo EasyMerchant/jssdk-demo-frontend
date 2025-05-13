@@ -30,12 +30,13 @@ export default async (request, context) => {
     defaultOptions.body = JSON.stringify({
       amount,
       is_recurring,
-      intervals,
-      allowed_cycles,
-      recurring_start_date_type,
-      recurring_start_date
+      intervals: ["weekly","monthly"],
+      allowed_cycles: 2,
+      recurring_start_date_type: "custom",
+      recurring_start_date: new Date().toISOString().split('T')[0]
     });
     }
+    console.log({defaultOptions});
     const response = await fetch(base_url+"/paymentintent", defaultOptions);
     const data = await response.json();
     return new Response(JSON.stringify({
