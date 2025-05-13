@@ -36,6 +36,7 @@ export default async (request, context) => {
       recurring_start_date
     });
     }
+    console.log({defaultOptions});
     const response = await fetch(base_url+"/paymentintent", defaultOptions);
     const data = await response.json();
     return new Response(JSON.stringify({
