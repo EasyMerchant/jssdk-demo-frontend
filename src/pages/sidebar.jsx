@@ -688,25 +688,32 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                                     name='enableRecurring'
                                     disabled={tokenOnly}
                                     checked={enableRecurring}
-                                    onChange={(event) => handleCardCheckboxChange(event)}
+                                    onChange={(event) => {
+                                        setExpandRecurringFields(event.target.checked);
+                                        handleCardCheckboxChange(event);
+                                    }}
                                     className={`${tokenOnly ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500`}
                                 />
                                 <label
-                                    htmlFor="save-card-checkbox"
+                                    htmlFor="enable-recurring-checkbox"
                                     className={`${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none`}
                                 >
                                     Enable Recurring
                                 </label>
                                 {
+                                enableRecurring && <span>
+                                {
                                     expandRecurringFields ?
-                                        <svg  onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer	 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+                                        <svg  onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer	 w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
                                         </svg>
 
-                                        : <svg onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer w-6 h-6 text-gray-800 dark:text-white"
+                                        : <svg onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer w-4 h-4 text-gray-800 dark:text-white"
                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1" />
                                         </svg>
+                                }
+                                </span>
                                 }
                             </div>
                             {
