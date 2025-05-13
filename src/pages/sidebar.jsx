@@ -8,6 +8,7 @@ import { countryCurrency, defaultOptions, defaultOptionsToggle } from '../utils/
 const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, toggleShowObject, showObject, optionsToggle, setOptionsToggle }) => {
     const optionsArray = ['card', "ach", "crypto", "wallet"];
     const [appearance, setAppearance] = useState(false);
+    const [expandRecurringFields, setExpandRecurringFields] = useState(false);
     const {
         paymentMethods,
         saveCard,
@@ -21,6 +22,10 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
         currency,
         amount,
         enableRecurring,
+        allowedCycles,
+        recurringStartDateType,
+        recurringStartDate,
+        intervals,
         showSubmitButton,
         fields: { billing, additional },
         apperanceSettings,
@@ -84,9 +89,22 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     }
     const handleInputChange = (event) => {
         const { name, value } = event.target
+        console.log(name, value);
         setCustomizeOptions((prevData) => ({
             ...prevData,
             [name]: value
+        }))
+    }
+    const handleMultiSelect = (event) => {
+        const { name} = event.target
+        let selected = Array.from(event.target.options).filter(function (option) {
+            return option.selected;
+        }).map(function (option) {
+            return option.value;
+        });
+        setCustomizeOptions((prevData) => ({
+            ...prevData,
+            [name]: selected
         }))
     }
 
@@ -259,6 +277,7 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
     const handleSidebarToggle = (id) => document.getElementById(id)?.classList.toggle("hidden");
 
     const handleResetSettings = (event) => {
+        console.log("Reset settings",defaultOptions);
         setCustomizeOptions(defaultOptions);
         setOptionsToggle(defaultOptionsToggle);
         localStorage.setItem('customizeOptions', JSON.stringify(defaultOptions));
@@ -661,24 +680,123 @@ const Sidebar = ({ customizeOptions, setCustomizeOptions, handleRenderUpdate, to
                             </div>
                         </li>
                                {/* Enable Recurring */ }
-                               <li className="w-full">
-                            <div className="flex items-center gap-x-3">
+                        <li className="w-full">
+                            <div className="flex gap-x-3">
                                 <input
                                     id="enable-recurring-checkbox"
                                     type="checkbox"
                                     name='enableRecurring'
-                                    disabled={ tokenOnly }
-                                    checked={ enableRecurring }
-                                    onChange={ (event) => handleCardCheckboxChange(event) }
-                                    className={ `${tokenOnly ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500` }
+                                    disabled={tokenOnly}
+                                    checked={enableRecurring}
+                                    onChange={(event) => handleCardCheckboxChange(event)}
+                                    className={`${tokenOnly ? "cursor-not-allowed" : "cursor-pointer"} checkbox w-5 h-5 text-blue-600 bg-transparent accent-transparent border-gray-300 rounded focus:ring-transparent dark:focus:ring-transparent dark:ring-offset-transparent dark:focus:ring-offset-transparent focus:ring-0 dark:bg-gray-600 dark:border-gray-500`}
                                 />
                                 <label
+
                                     htmlFor="enable-recurring-checkbox"
-                                    className={ `${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none` }
+                                    className={`${tokenOnly ? " text-gray-500 cursor-not-allowed" : " text-gray-900 cursor-pointer"} w-full text-sm font-medium dark:text-gray-300 select-none`}
                                 >
                                     Enable Recurring
                                 </label>
+                                {
+                                    expandRecurringFields ?
+                                        <svg  onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer	 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
+                                        </svg>
+
+                                        : <svg onClick={() => setExpandRecurringFields(!expandRecurringFields)} className="cursor-pointer w-6 h-6 text-gray-800 dark:text-white"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1" />
+                                        </svg>
+                                }
                             </div>
+                            {
+                                enableRecurring && expandRecurringFields && <ul
+                                    id="recurring-options"
+                                    className="w-full mt-3 min-w-48 mt-2 px-4 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                >
+
+                                    <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                        <span className=' text-sm pt-0 py-0 mb-2 block'>Allow Cycles</span>
+                                        <div className="flex items-center gap-x-3">
+                                            <input
+                                                id="allowedCycles"
+                                                type="text"
+                                                name='allowedCycles'
+                                                value={allowedCycles}
+                                                onChange={handleInputChange}
+                                                className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Enter Allowed Cycles"
+                                            />
+                                        </div>
+
+                                    </li>
+
+                                    <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                        <span className=' text-sm pt-0 py-0 mb-2 block'>Intervals</span>
+                                        <div className="flex items-center gap-x-3">
+                                            <select
+                                                name="intervals"
+                                                defaultValue={intervals}
+                                                onChange={handleMultiSelect}
+                                                className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                multiple={true}
+                                            >
+                                                <option value="daily" >Daily</option>
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                                <option value="quarterly">Quarterly</option>
+                                                <option value="half_yearly">Half Yearly</option>
+                                                <option value="yearly">Yearly</option>
+                                                <option value="every_two_years">Every two years</option>
+                                                <option value="every_three_years">Every three years</option>
+                                                <option value="every_four_years">Every four years</option>
+                                                <option value="every_five_years">Every five years</option>
+                                            </select>
+                                        </div>
+
+                                    </li>
+                                    <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                        <span className=' text-sm pt-0 py-0 mb-2 block'>Recurring Start Date Type</span>
+                                        <div className="flex items-center gap-x-3">
+                                            <select
+                                                name="recurringStartDateType"
+                                                defaultValue={recurringStartDateType}
+                                                onChange={handleInputChange}
+                                                className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            >
+                                                <option value="fixed" >Fixed</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
+                                        </div>
+
+                                    </li>
+                                    <li className="w-full py-1 rounded-t-lg dark:border-gray-600">
+                                        <span className=' text-sm pt-0 py-0 mb-2 block'>Recurring Start Date</span>
+                                        <div className="relative max-w-sm">
+
+                                            <input
+                                                id="recurringStartDate"
+                                                type="date"
+                                                name='recurringStartDate'
+                                                value={recurringStartDate}
+                                                onChange={handleInputChange}
+                                                className="bg-gray-50 h-full px-3 py-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Start Date"
+                                                min={new Date().toISOString().split('T')[0]}
+                                            />
+                                            <div class="absolute inset-y-0 end-3 flex items-center ps-3 pointer-events-none">
+                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                </svg>
+                                            </div>
+
+                                        </div>
+
+                                    </li>
+
+                                </ul>
+                            }
                         </li>
                         {/* Save Card */ }
                         <li className="w-full">
