@@ -30,10 +30,10 @@ export default async (request, context) => {
     defaultOptions.body = JSON.stringify({
       amount,
       is_recurring,
-      intervals: ["weekly","monthly"],
-      allowed_cycles: 2,
-      recurring_start_date_type: "custom",
-      recurring_start_date: new Date().toISOString().split('T')[0]
+      intervals,
+      allowed_cycles,
+      recurring_start_date_type,
+      recurring_start_date
     });
     }
     console.log({defaultOptions});
